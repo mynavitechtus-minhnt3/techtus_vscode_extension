@@ -1,0 +1,13 @@
+{
+  "runCatching": {
+    "prefix": "rc",
+    "body": [
+      "await runCatching(",
+      " action: () async {",
+      "   ",
+      " },",
+      ");"
+    ],
+    "description": "runCatching"
+  }
+}

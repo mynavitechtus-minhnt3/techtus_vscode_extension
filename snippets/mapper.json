@@ -1,0 +1,35 @@
+{
+  "mapper": {
+    "prefix": "mp",
+    "body": [
+      "import 'package:hooks_riverpod/hooks_riverpod.dart';",
+      "import 'package:injectable/injectable.dart';",
+      "",
+      "import '../../index.dart';",
+      "",
+      "final ${TM_FILENAME_BASE/(.*)/${1:/camelcase}/}Provider = Provider.autoDispose<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}>(",
+      "  (ref) => getIt.get<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}>(),",
+      ");",
+      "",
+      "@Injectable()",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends BaseDataMapper<${1:Api${TM_FILENAME_BASE/(.*)_mapper/${1:/pascalcase}/}}, ${2:Local${TM_FILENAME_BASE/(.*)_mapper/${1:/pascalcase}/}}>",
+      "    with DataMapperMixin {",
+      "  @override",
+      "  ${2} mapToLocal(${1}? data) {",
+      "    return ${2}(",
+      "      ",
+      "    );",
+      "  }",
+      "",
+      "  @override",
+      "  ${1} mapToRemote(${2} data) {",
+      "    return ${1}(",
+      "      ",
+      "    );",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "mapper"
+  }
+}

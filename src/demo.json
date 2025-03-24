@@ -1,0 +1,167 @@
+{
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC8xMTYuMTE4LjQ4LjEzODo4MDgxXC9hcGlcL3YxXC91c2Vyc1wvYXV0aFwvbG9naW4iLCJpYXQiOjE2NDkyMTYyMTksImV4cCI6MTY0OTI1OTQxOSwibmJmIjoxNjQ5MjE2MjE5LCJqdGkiOiJ6azJzWWF1Q3ZpbXg0WUxxIiwic3ViIjoxMywicHJ2IjoiZTQ5MjlmOGVkMGUzZWRmNDc2YWU4NDIyZWM0NjM4MTFiYmNjZTE0ZiIsImN1cnJlbnRfY29tcGFueSI6MX0.a8t7SJb2QYYK8zKZ6GXlaOXBqrMQ4HKv9yCM6VhqxOQ",
+    "token_type": "bearer",
+    "expires_in": 43200,
+    "employee": {
+        "id": 13,
+        "email": "namdangit@gmail.com",
+        "email_verified_at": null,
+        "remember_token": null,
+        "created_at": "2021-12-06T03:55:22.000000Z",
+        "updated_at": "2021-12-06T03:55:22.000000Z",
+        "tp_id": null,
+        "employee_info_id": 6,
+        "info": {
+            "id": 6,
+            "code": "DNS01",
+            "fullname": "Admin",
+            "image": "/uploads/employees/1587010172download.jpg",
+            "telephone": "0962241836",
+            "department_id": 58,
+            "part_id": null,
+            "team_id": null,
+            "company_id": 1,
+            "created_at": "2021-12-06T03:55:21.000000Z",
+            "updated_at": "2022-03-25T08:53:24.000000Z",
+            "ssn": null,
+            "account_number": "010999888765",
+            "bank_name": "Vietcombank",
+            "status": 1,
+            "gender": 1,
+            "birthday": "1986-11-01",
+            "national": 0,
+            "termination_date": null,
+            "receive_date": null,
+            "hire_date": null,
+            "working_type": 0,
+            "job_position_id": 1,
+            "enter_date": "2019-09-11",
+            "vacation_start_date": "2020-04-16",
+            "vacation_start_date_type": 1,
+            "department": {
+                "id": 58,
+                "status": 1,
+                "name": "Ban giám đốc tổng công ty",
+                "code": "HN_BGD",
+                "email": "bgd@tanphat.com",
+                "fax": null,
+                "hotline": null,
+                "telephone": null,
+                "fanpage": null,
+                "skype": null,
+                "zalo": null,
+                "branch_id": null,
+                "company_id": 1,
+                "created_at": "2021-12-06T03:55:21.000000Z",
+                "updated_at": "2021-12-06T03:55:21.000000Z"
+            }
+        },
+        "permissions": [],
+        "roles": [
+            {
+                "id": 3,
+                "name": "Admin",
+                "guard_name": "api",
+                "created_at": "2022-02-09T08:32:14.000000Z",
+                "updated_at": "2022-02-09T09:09:54.000000Z",
+                "status": 1,
+                "created_by": 13,
+                "updated_by": 13,
+                "description": "admin",
+                "sort_order": 1,
+                "pivot": {
+                    "employee_id": 13,
+                    "role_id": 3,
+                    "model_type": "Modules\\Timesheet\\Entities\\Employee"
+                },
+                "permissions": [
+                    {
+                        "id": 1,
+                        "name": "Bảng chấm công chi tiết",
+                        "guard_name": "api",
+                        "created_at": "2022-02-09T08:29:34.000000Z",
+                        "updated_at": "2022-02-09T08:29:34.000000Z",
+                        "display_name": "Bảng chấm công chi tiết",
+                        "group": "Chấm công",
+                        "pivot": {
+                            "role_id": 3,
+                            "permission_id": 1
+                        }
+                    },
+                    {
+                        "id": 2,
+                        "name": "Bảng chấm công tổng hợp",
+                        "guard_name": "api",
+                        "created_at": "2022-02-09T08:29:34.000000Z",
+                        "updated_at": "2022-02-09T08:29:34.000000Z",
+                        "display_name": "Bảng chấm công tổng hợp",
+                        "group": "Chấm công",
+                        "pivot": {
+                            "role_id": 3,
+                            "permission_id": 2
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "employee_info": {
+        "id": 6,
+        "code": "DNS01",
+        "fullname": "Admin",
+        "image": "/uploads/employees/1587010172download.jpg",
+        "telephone": "0962241836",
+        "department_id": 58,
+        "part_id": null,
+        "team_id": null,
+        "company_id": 1,
+        "created_at": "2021-12-06T03:55:21.000000Z",
+        "updated_at": "2022-03-25T08:53:24.000000Z",
+        "ssn": null,
+        "account_number": "010999888765",
+        "bank_name": "Vietcombank",
+        "status": 1,
+        "gender": 1,
+        "birthday": "1986-11-01",
+        "national": 0,
+        "termination_date": null,
+        "receive_date": null,
+        "hire_date": null,
+        "working_type": 0,
+        "job_position_id": 1,
+        "enter_date": "2019-09-11",
+        "vacation_start_date": "2020-04-16",
+        "vacation_start_date_type": 1
+    },
+    "permissions": [
+        {
+            "id": 1,
+            "name": "Bảng chấm công chi tiết",
+            "guard_name": "api",
+            "created_at": "2022-02-09T08:29:34.000000Z",
+            "updated_at": "2022-02-09T08:29:34.000000Z",
+            "display_name": "Bảng chấm công chi tiết",
+            "group": "Chấm công",
+            "pivot": {
+                "role_id": 3,
+                "permission_id": 1
+            }
+        },
+        {
+            "id": 2,
+            "name": "Bảng chấm công tổng hợp",
+            "guard_name": "api",
+            "created_at": "2022-02-09T08:29:34.000000Z",
+            "updated_at": "2022-02-09T08:29:34.000000Z",
+            "display_name": "Bảng chấm công tổng hợp",
+            "group": "Chấm công",
+            "pivot": {
+                "role_id": 3,
+                "permission_id": 2
+            }
+        }
+    ],
+    "role": null,
+    "current_company": 1,
+    "department_name": "Ban giám đốc tổng công ty"
+}

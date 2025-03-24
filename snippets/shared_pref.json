@@ -1,0 +1,62 @@
+{
+    "Create Preference Getter Setter (bool)": {
+        "prefix": "spb",
+        "body": [
+          "static const key${1/(.*)/${1:/capitalize}/} = '${1:isDarkMode}';",
+          "",
+          "bool get ${1:isDarkMode} {",
+          "  return _sharedPreference.getBool(key${1/(.*)/${1:/capitalize}/}) ?? false;",
+          "}",
+          "",
+          "Future<bool> save${1/(.*)/${1:/capitalize}/}(bool ${1:isDarkMode}) {",
+          "  return _sharedPreference.setBool(key${1/(.*)/${1:/capitalize}/}, ${1:isDarkMode});",
+          "}"
+        ],
+        "description": "Create Preference Getter Setter (bool)"
+      },
+      "Create Preference Getter Setter (int)": {
+        "prefix": "spi",
+        "body": [
+          "static const key${1/(.*)/${1:/capitalize}/} = '${1:counter}';",
+          "",
+          "int get ${1:counter} {",
+          "  return _sharedPreference.getInt(key${1/(.*)/${1:/capitalize}/}) ?? 0;",
+          "}",
+          "",
+          "Future<bool> save${1/(.*)/${1:/capitalize}/}(int ${1:counter}) {",
+          "  return _sharedPreference.setInt(key${1/(.*)/${1:/capitalize}/}, ${1:counter});",
+          "}"
+        ],
+        "description": "Create Preference Getter Setter (int)"
+      },
+      "Create Preference Getter Setter (String)": {
+        "prefix": "sps",
+        "body": [
+          "static const key${1/(.*)/${1:/capitalize}/} = '${1:username}';",
+          "",
+          "String get ${1:username} {",
+          "  return _sharedPreference.getString(key${1/(.*)/${1:/capitalize}/}) ?? '';",
+          "}",
+          "",
+          "Future<bool> save${1/(.*)/${1:/capitalize}/}(String ${1:username}) {",
+          "  return _sharedPreference.setString(key${1/(.*)/${1:/capitalize}/}, ${1:username});",
+          "}"
+        ],
+        "description": "Create Preference Getter Setter (String)"
+      },
+      "Create Preference Getter Setter (double)": {
+        "prefix": "spd",
+        "body": [
+          "static const key${1/(.*)/${1:/capitalize}/} = '${1:latitude}';",
+          "",
+          "double get ${1:latitude} {",
+          "  return _sharedPreference.getDouble(key${1/(.*)/${1:/capitalize}/}) ?? 0.0;",
+          "}",
+          "",
+          "Future<bool> save${1/(.*)/${1:/capitalize}/}(double ${1:latitude}) {",
+          "  return _sharedPreference.setDouble(key${1/(.*)/${1:/capitalize}/}, ${1:latitude});",
+          "}"
+        ],
+        "description": "Create Preference Getter Setter (double)"
+      }
+}

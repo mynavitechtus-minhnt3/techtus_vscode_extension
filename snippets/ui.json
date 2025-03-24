@@ -1,0 +1,109 @@
+{
+  "padding all": {
+    "prefix": "pa",
+    "body": ["EdgeInsets.all(${1:16}.rps)"],
+    "description": "padding all"
+  },
+  "padding horizontal": {
+    "prefix": "ph",
+    "body": ["EdgeInsets.symmetric(", "    horizontal: ${1:16}.rps,", ")"],
+    "description": "padding horizontal"
+  },
+  "padding vertical": {
+    "prefix": "pv",
+    "body": ["EdgeInsets.symmetric(", "    vertical: ${1:16}.rps,", ")"],
+    "description": "padding vertical"
+  },
+  "padding only": {
+    "prefix": "po",
+    "body": ["EdgeInsets.only(${1|top,bottom,left,right|}: ${2:16}.rps)"],
+    "description": "padding symmetric"
+  },
+  "SizedBox width": {
+    "prefix": "sw",
+    "body": ["SizedBox(width: ${1:16}.rps),"],
+    "description": "SizedBox width"
+  },
+  "SizedBox height": {
+    "prefix": "sh",
+    "body": ["SizedBox(height: ${1:16}.rps),"],
+    "description": "SizedBox height"
+  },
+  "fake image url": {
+    "prefix": "fi",
+    "body": [
+      "https://cdn.pixabay.com/photo/2012/08/27/14/19/mountains-55067_1280.png"
+    ],
+    "description": "fake image url"
+  },
+  "dimen": {
+    "prefix": "di",
+    "body": ["${1:16}.rps"],
+    "description": "dimen"
+  },
+  "TextStyle": {
+    "prefix": "st",
+    "body": [
+      "style(",
+      "  fontSize: ${1:14}.rps,",
+      "  color: color.${2:black},",
+      ")"
+    ],
+    "description": "TextStyle"
+  },
+  "l10n": {
+    "prefix": "ln",
+    "body": ["l10n.${1:login}"],
+    "description": "l10n"
+  },
+  "color": {
+    "prefix": "co",
+    "body": ["color.${1:black}"],
+    "description": "color"
+  },
+  "image": {
+    "prefix": "img",
+    "body": ["image.${1:logo}"],
+    "description": "image"
+  },
+  "useEffect": {
+    "prefix": "ue",
+    "body": [
+      "useEffect(",
+      "  () {",
+      "    Future.microtask(() {",
+      "      ",
+      "    });",
+      "",
+      "    return null;",
+      "  },",
+      "  [],",
+      ");"
+    ],
+    "description": "useEffect"
+  },
+  "showDialog": {
+    "prefix": "sd",
+    "body": ["await ref.nav.showDialog(", "  CommonPopup.xxx(),", ");"],
+    "description": "showDialog"
+  },
+  "showSnackBar": {
+    "prefix": "ssb",
+    "body": ["ref.nav.showSnackBar(CommonPopup.xxx());"],
+    "description": "showSnackBar"
+  },
+  "showBottomSheet": {
+    "prefix": "sbs",
+    "body": [
+      "await ref.nav.showModalBottomSheet(",
+      "  CommonPopup.xxx(),",
+      ");"
+    ],
+    "description": "showBottomSheet"
+  },
+  "SchedulerBinding": {
+    "prefix": "sb",
+    "body": ["SchedulerBinding.instance.addPostFrameCallback((_) {", "", "});"],
+    "description": "SchedulerBinding"
+  }
+}
