@@ -4,30 +4,18 @@ export interface RiverpodTemplates {
   getStateTemplate: (feature: string) => string;
 }
 
-import { getPageTemplate as getPageTemplate1 } from "./riverpod_page.template";
-import { getViewModelTemplate as getViewModelTemplate1 } from "./view_model.template";
-import { getStateTemplate as getStateTemplate1 } from "./state.template";
-
-import { getPageTemplate as getPageTemplate2 } from "./riverpod_page.template_2";
-import { getViewModelTemplate as getViewModelTemplate2 } from "./view_model.template_2";
-import { getStateTemplate as getStateTemplate2 } from "./state.template_2";
+import { getPageTemplate } from "./riverpod_page.template";
+import { getViewModelTemplate } from "./view_model.template";
+import { getStateTemplate } from "./state.template";
 
 const templates: { [key: string]: RiverpodTemplates } = {
   template1: {
-    getPageTemplate: getPageTemplate1,
-    getViewModelTemplate: getViewModelTemplate1,
-    getStateTemplate: getStateTemplate1,
-  },
-  template2: {
-    getPageTemplate: getPageTemplate2,
-    getViewModelTemplate: getViewModelTemplate2,
-    getStateTemplate: getStateTemplate2,
+    getPageTemplate,
+    getViewModelTemplate,
+    getStateTemplate,
   },
 };
 
-export function getRiverpodTemplates(name: string | undefined): RiverpodTemplates {
-  if (name && templates[name]) {
-    return templates[name];
-  }
+export function getRiverpodTemplates(_: string | undefined = undefined): RiverpodTemplates {
   return templates["template1"];
 }
