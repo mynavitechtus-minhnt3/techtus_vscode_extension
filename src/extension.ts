@@ -28,7 +28,6 @@ import {
   wrapWithStack,
   wrapWithVerticalPadding,
 } from "./commands/wrap_widget/wrap_with_widget.command";
-import { sortAndSave } from "./extension/sortAndSave";
 
 const DART_MODE = { language: "dart", scheme: "file" };
 
@@ -68,7 +67,6 @@ export function activate(context: vscode.ExtensionContext) {
       "mynavimobiletool.translateAndExtractValueToArbFiles",
       translateAndExtractValueToArbFiles
     ),
-    vscode.commands.registerCommand("mynavimobiletool.sortArbFiles", sortAndSave),
     configChanges,
     documentSave,
     vscode.languages.registerCodeActionsProvider(

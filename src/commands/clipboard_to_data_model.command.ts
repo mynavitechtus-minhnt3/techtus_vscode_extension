@@ -9,10 +9,8 @@ import { jsonc } from 'jsonc';
 import { ClassNameModel, Settings } from "./clipboard_to_data_model/settings";
 import { ModelGenerator } from "./clipboard_to_data_model/model-generator";
 import { ClassDefinition } from "./clipboard_to_data_model/syntax";
-import { fetchPackageInfoFor } from "./auto_fix_imports/convert_to_relative_import";
+import { fetchPackageInfoFor, writeFile } from "../utils/utils";
 import { configResolver } from "./fix_imports.command";
-import { getDataMapperTemplate } from "../templates/data-mapper.template";
-import { getEntityTemplate } from "../templates/entity.template";
 import { autoExport } from "./auto_export.command";
 
 export const transformFromClipboardToDataModel = async () => {
@@ -233,16 +231,4 @@ export async function createClass(settings: Settings) {
 
 function existsSync(path: string): boolean {
     return fs.existsSync(path);
-}
-
-export function writeFile(path: string, data: string) {
-    return new Promise<void>((resolve, reject) => {
-        fs.writeFile(path, data, 'utf8', (err) => {
-            if (err) {
-                reject(new Error(`Couldn't write file due to error: ${err}`));
-            } else {
-                resolve();
-            }
-        });
-    });
 }

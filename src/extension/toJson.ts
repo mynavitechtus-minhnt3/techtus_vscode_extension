@@ -1,7 +1,5 @@
 import { L10nObject } from './l10nObject';
-import { Placeholder } from '../placeholders/placeholder';
-import { PlaceholderType } from '../placeholders/placeholderType';
-import { notInclude } from '../placeholders/dateFormat';
+import { Placeholder, PlaceholderType, notInclude } from '../utils/utils';
 import { sortArb } from './sortArb';
 
 function getOptionalParametersMap(placeholder: Placeholder): Map<string, unknown> {

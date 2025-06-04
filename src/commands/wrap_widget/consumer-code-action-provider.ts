@@ -1,5 +1,5 @@
 import { window, CodeAction, CodeActionProvider, CodeActionKind } from "vscode";
-import { getSelectedText } from "../../utils";
+import { getSelectedText } from "../../utils/utils";
 
 export class ConsumerCodeActionProvider implements CodeActionProvider {
   public provideCodeActions(): CodeAction[] {
