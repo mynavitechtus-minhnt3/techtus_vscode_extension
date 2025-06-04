@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { KeyValuePair } from '../../extension/keyValuePair';
-import { Placeholder } from '../../placeholders/placeholder';
+import { Placeholder } from '../../utils/utils';
 
 export class EditFilesParameters {
   constructor(

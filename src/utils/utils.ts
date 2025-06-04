@@ -219,6 +219,185 @@ export const getSelectedText = (
         : lineText.length;
 
     return new vscode.Selection(
+
+// Placeholder helpers moved from src/placeholders
+
+export const validDateFormats = [
+  "d",
+  "E",
+  "EEEE",
+  "LLL",
+  "LLLL",
+  "M",
+  "Md",
+  "MEd",
+  "MMM",
+  "MMMd",
+  "MMMEd",
+  "MMMM",
+  "MMMMd",
+  "MMMMEEEEd",
+  "QQQ",
+  "QQQQ",
+  "y",
+  "yM",
+  "yMd",
+  "yMEd",
+  "yMMM",
+  "yMMMd",
+  "yMMMEd",
+  "yMMMM",
+  "yMMMMd",
+  "yMMMMEEEEd",
+  "yQQQ",
+  "yQQQQ",
+  "H",
+  "Hm",
+  "Hms",
+  "j",
+  "jm",
+  "jms",
+  "jmv",
+  "jmz",
+  "jv",
+  "jz",
+  "m",
+  "ms",
+  "s",
+];
+
+export function notInclude(value: string) {
+  return !validDateFormats.includes(value);
+}
+
+export const validNumberFormats = [
+  "compact",
+  "compactCurrency",
+  "compactSimpleCurrency",
+  "compactLong",
+  "currency",
+  "decimalPattern",
+  "decimalPercentPattern",
+  "percentPattern",
+  "scientificPattern",
+  "simpleCurrency",
+];
+
+export const numberFormatsWithSymbol = ["compactCurrency", "currency"];
+export function includeInSymbol(value: string) {
+  return numberFormatsWithSymbol.includes(value);
+}
+
+export const numberFormatsWithDecimalDigits = [
+  "compactCurrency",
+  "compactSimpleCurrency",
+  "currency",
+  "decimalPercentPattern",
+  "simpleCurrency",
+];
+export function includeInDecimalDigits(value: string) {
+  return numberFormatsWithDecimalDigits.includes(value);
+}
+
+export const numberFormatsWithCustomPattern = ["currency"];
+export function includeInCustomPattern(value: string) {
+  return numberFormatsWithCustomPattern.includes(value);
+}
+
+export class Placeholder {
+  public format?: string;
+  public symbol?: string;
+  public decimalDigits?: number;
+  public customPattern?: string;
+
+  constructor(
+    readonly name: string,
+    readonly value: string,
+    readonly type: PlaceholderType,
+  ) {}
+
+  addFormat(value: string): this {
+    this.format = value;
+    return this;
+  }
+
+  addSymbol(value: string): this {
+    this.symbol = value;
+    return this;
+  }
+
+  addDecimalDigits(value: number): this {
+    this.decimalDigits = value;
+    return this;
+  }
+
+  addCustomPattern(format: string): this {
+    this.customPattern = format;
+    return this;
+  }
+}
+
+export enum PlaceholderType {
+  String = "String",
+  int = "int",
+  num = "num",
+  double = "double",
+  DateTime = "DateTime",
+  plural = "plural",
+}
+
+export function getPlaceholderTypes() {
+  return Object.keys(PlaceholderType).filter((p) => isNaN(Number(p)));
+}
+
+export function getPlaceholderType(placeholderTypeValue: string) {
+  return Object.values(PlaceholderType).filter((p) => p.toString() === placeholderTypeValue)[0] as PlaceholderType;
+}
+
+export class PlaceholderTypeItem implements vscode.QuickPickItem {
+  constructor(readonly label: string) {}
+}
+
+export async function showPlaceholderQuickPick(
+  variable: string,
+): Promise<PlaceholderType> {
+  const placeholderTypeValue = await showQuickPick(
+    `Choose the type for the variable ${variable}`,
+    getPlaceholderTypes().map((p) => new PlaceholderTypeItem(p)),
+  );
+  return getPlaceholderType(placeholderTypeValue);
+}
+
+export async function showDateFormatQuickPick(variable: string): Promise<string> {
+  const disposables: vscode.Disposable[] = [];
+  try {
+    return await new Promise<string>((resolve) => {
+      const quickPick = vscode.window.createQuickPick();
+      quickPick.title = `Choose the number format for the variable ${variable}`;
+      quickPick.items = validDateFormats.map((s) => new LionizationPickItem(s));
+      quickPick.onDidChangeValue(() => {
+        if (notInclude(quickPick.value))
+          quickPick.items = [quickPick.value, ...validDateFormats].map((label) => ({ label }));
+      });
+      disposables.push(
+        quickPick.onDidChangeSelection((selected) => {
+          quickPick.enabled = false;
+          quickPick.busy = true;
+          const item = selected[0];
+          resolve(item.label);
+          quickPick.enabled = true;
+          quickPick.busy = false;
+          quickPick.hide();
+        }),
+      );
+      quickPick.show();
+    });
+  } finally {
+    disposables.forEach((d) => {
+      d.dispose();
+    });
+  }
+}
       new vscode.Position(line.lineNumber, widgetStartIndex),
       new vscode.Position(line.lineNumber, endIndex)
     );

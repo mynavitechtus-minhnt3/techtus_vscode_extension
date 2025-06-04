@@ -1,4 +1,4 @@
-import { Placeholder } from '../placeholders/placeholder';
+import { Placeholder } from '../utils/utils';
 
 export class L10nObject {
   readonly isMetadataEnabled: boolean;
