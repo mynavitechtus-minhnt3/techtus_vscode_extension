@@ -10,6 +10,7 @@ export class ConfigResolver {
     private _uiFolderPath: string;
     private _dataModelPath: string;
     private _entityPath: string;
+    private _riverpodPageTemplate: string;
     appName: string;
 
     constructor() {
@@ -27,6 +28,7 @@ export class ConfigResolver {
         this._dataModelPath = config.get('dataModelPath') || '';
         this._entityPath = config.get('entityPath') || '';
         this.appName = config.get('appName') || '';
+        this._riverpodPageTemplate = config.get('riverpodPageTemplate') || 'template1';
     }
 
     public get excludeFilesWhenFixImport() : Array<string> {
@@ -63,5 +65,9 @@ export class ConfigResolver {
 
     public get entityPath(): string {
         return this._entityPath;
+    }
+
+    public get riverpodPageTemplate(): string {
+        return this._riverpodPageTemplate;
     }
 }
