@@ -1,0 +1,673 @@
+{
+  "Create a model": {
+    "prefix": "fr",
+    "body": [
+      "import 'package:freezed_annotation/freezed_annotation.dart';",
+      "",
+      "part '${TM_FILENAME_BASE}.freezed.dart';",
+      "",
+      "@freezed",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} with _$${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} {",
+      "  const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}._();",
+      "",
+      "  const factory ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({",
+      "    @Default('') String id,",
+      "  }) = _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/};",
+      "}",
+      ""
+    ],
+    "description": "Create a model"
+  },
+  "Create API model": {
+    "prefix": "am",
+    "body": [
+      "import 'package:freezed_annotation/freezed_annotation.dart';",
+      "",
+      "part '${TM_FILENAME_BASE}.freezed.dart';",
+      "part '${TM_FILENAME_BASE}.g.dart';",
+      "",
+      "@freezed",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} with _$${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} {",
+      "  const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}._();",
+      "",
+      "  const factory ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({",
+      "    @Default('') @JsonKey(name: 'id') String id,",
+      "  }) = _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/};",
+      "",
+      "  factory ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.fromJson(Map<String, dynamic> json) => _$${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}FromJson(json);",
+      "}",
+      ""
+    ],
+    "description": "Create API model"
+  },
+  "Create Firebase model": {
+    "prefix": "fm",
+    "body": [
+      "import 'package:freezed_annotation/freezed_annotation.dart';",
+      "",
+      "part '${TM_FILENAME_BASE}.freezed.dart';",
+      "part '${TM_FILENAME_BASE}.g.dart';",
+      "",
+      "@freezed",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} with _$${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} {",
+      "  const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}._();",
+      "",
+      "  const factory ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({",
+      "    @Default('')",
+      "    @JsonKey(name: ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.keyId)",
+      "    String id,",
+      "  }) = _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/};",
+      "",
+      "  factory ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.fromJson(Map<String, dynamic> json) =>",
+      "      _$${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}FromJson(json);",
+      "",
+      "  static const keyId = 'id';",
+      "}",
+      ""
+    ],
+    "description": "Create Firebase model"
+  },
+  "Create Isar model": {
+    "prefix": "im",
+    "body": [
+      "import 'package:isar/isar.dart';",
+      "",
+      "part '${TM_FILENAME_BASE}.g.dart';",
+      "",
+      "@collection",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} {",
+      "  ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({",
+      "    this.uniqueId = '',",
+      "    this.userId = '',",
+      "    this.createdAt = 0,",
+      "    this.updatedAt = 0,",
+      "  });",
+      "",
+      "  Id id = Isar.autoIncrement;",
+      "  @Index(unique: true, replace: true)",
+      "  String uniqueId;",
+      "  String userId;",
+      "  int createdAt;",
+      "  int updatedAt;",
+      "",
+      "  @override",
+      "  String toString() {",
+      "    return '${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}{id: $id, uniqueId: $uniqueId, userId: $userId, createdAt: $createdAt, updatedAt: $updatedAt}';",
+      "  }",
+      "",
+      "  @override",
+      "  bool operator ==(Object other) =>",
+      "      identical(this, other) ||",
+      "      other is ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} &&",
+      "          runtimeType == other.runtimeType &&",
+      "          id == other.id &&",
+      "          uniqueId == other.uniqueId &&",
+      "          userId == other.userId &&",
+      "          createdAt == other.createdAt &&",
+      "          updatedAt == other.updatedAt;",
+      "",
+      "  @override",
+      "  int get hashCode =>",
+      "      id.hashCode ^",
+      "      uniqueId.hashCode ^",
+      "      userId.hashCode ^",
+      "      createdAt.hashCode ^",
+      "      updatedAt.hashCode;",
+      "}",
+      ""
+    ],
+    "description": "Create Isar model"
+  },
+  "mapper": {
+    "prefix": "mp",
+    "body": [
+      "import 'package:hooks_riverpod/hooks_riverpod.dart';",
+      "import 'package:injectable/injectable.dart';",
+      "",
+      "import '../../index.dart';",
+      "",
+      "final ${TM_FILENAME_BASE/(.*)/${1:/camelcase}/}Provider = Provider.autoDispose<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}>(",
+      "  (ref) => getIt.get<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}>(),",
+      ");",
+      "",
+      "@Injectable()",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends BaseDataMapper<${1:Api${TM_FILENAME_BASE/(.*)_mapper/${1:/pascalcase}/}}, ${2:Local${TM_FILENAME_BASE/(.*)_mapper/${1:/pascalcase}/}}>",
+      "    with DataMapperMixin {",
+      "  @override",
+      "  ${2} mapToLocal(${1}? data) {",
+      "    return ${2}(",
+      "      ",
+      "    );",
+      "  }",
+      "",
+      "  @override",
+      "  ${1} mapToRemote(${2} data) {",
+      "    return ${1}(",
+      "      ",
+      "    );",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "mapper"
+  },
+  "Future.delayed": {
+    "prefix": "dl",
+    "body": [
+      "await Future<dynamic>.delayed(const Duration(milliseconds: ${1:2000}));"
+    ],
+    "description": "Future.delayed"
+  },
+  "create provider": {
+    "prefix": "pr",
+    "body": [
+      "final ${TM_FILENAME_BASE/(.*)/${1:/camelcase}/}Provider =",
+      "    Provider.autoDispose<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}>(",
+      "  (ref) => getIt.get<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}>(),",
+      ");"
+    ],
+    "description": "create provider"
+  },
+  "LoadMoreExecutor": {
+    "prefix": "lm",
+    "body": [
+      "import 'package:freezed_annotation/freezed_annotation.dart';",
+      "import 'package:hooks_riverpod/hooks_riverpod.dart';",
+      "import 'package:injectable/injectable.dart';",
+      "",
+      "import '../../../../index.dart';",
+      "",
+      "final ${TM_FILENAME_BASE/(.*)/${1:/camelcase}/}Provider = Provider<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}>(",
+      "  (ref) => getIt.get<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}>(),",
+      ");",
+      "",
+      "class ${TM_FILENAME_BASE/(.*)_executor/${1:/pascalcase}/}Params extends LoadMoreParams {",
+      "  ${TM_FILENAME_BASE/(.*)_executor/${1:/pascalcase}/}Params();",
+      "}",
+      "",
+      "@Injectable()",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends LoadMoreExecutor<${1:ApiUserData}, ${TM_FILENAME_BASE/(.*)_executor/${1:/pascalcase}/}Params> {",
+      "  ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}(this.appApiService);",
+      "",
+      "  final AppApiService appApiService;",
+      "",
+      "  @protected",
+      "  @override",
+      "  Future<PagedList<${1:ApiUserData}>> action({",
+      "    required int page,",
+      "    required int limit,",
+      "    required ${TM_FILENAME_BASE/(.*)_executor/${1:/pascalcase}/}Params? params,",
+      "  }) async {",
+      "    final response = await appApiService.${2:getUsers}(page: page, limit: limit);",
+      "",
+      "    return PagedList(data: response?.results ?? [], next: response?.next);",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "LoadMoreExecutor"
+  },
+  "Create Preference Getter Setter (bool)": {
+    "prefix": "spb",
+    "body": [
+      "static const key${1/(.*)/${1:/capitalize}/} = '${1:isDarkMode}';",
+      "",
+      "bool get ${1:isDarkMode} {",
+      "  return _sharedPreference.getBool(key${1/(.*)/${1:/capitalize}/}) ?? false;",
+      "}",
+      "",
+      "Future<bool> save${1/(.*)/${1:/capitalize}/}(bool ${1:isDarkMode}) {",
+      "  return _sharedPreference.setBool(key${1/(.*)/${1:/capitalize}/}, ${1:isDarkMode});",
+      "}"
+    ],
+    "description": "Create Preference Getter Setter (bool)"
+  },
+  "Create Preference Getter Setter (int)": {
+    "prefix": "spi",
+    "body": [
+      "static const key${1/(.*)/${1:/capitalize}/} = '${1:counter}';",
+      "",
+      "int get ${1:counter} {",
+      "  return _sharedPreference.getInt(key${1/(.*)/${1:/capitalize}/}) ?? 0;",
+      "}",
+      "",
+      "Future<bool> save${1/(.*)/${1:/capitalize}/}(int ${1:counter}) {",
+      "  return _sharedPreference.setInt(key${1/(.*)/${1:/capitalize}/}, ${1:counter});",
+      "}"
+    ],
+    "description": "Create Preference Getter Setter (int)"
+  },
+  "Create Preference Getter Setter (String)": {
+    "prefix": "sps",
+    "body": [
+      "static const key${1/(.*)/${1:/capitalize}/} = '${1:username}';",
+      "",
+      "String get ${1:username} {",
+      "  return _sharedPreference.getString(key${1/(.*)/${1:/capitalize}/}) ?? '';",
+      "}",
+      "",
+      "Future<bool> save${1/(.*)/${1:/capitalize}/}(String ${1:username}) {",
+      "  return _sharedPreference.setString(key${1/(.*)/${1:/capitalize}/}, ${1:username});",
+      "}"
+    ],
+    "description": "Create Preference Getter Setter (String)"
+  },
+  "Create Preference Getter Setter (double)": {
+    "prefix": "spd",
+    "body": [
+      "static const key${1/(.*)/${1:/capitalize}/} = '${1:latitude}';",
+      "",
+      "double get ${1:latitude} {",
+      "  return _sharedPreference.getDouble(key${1/(.*)/${1:/capitalize}/}) ?? 0.0;",
+      "}",
+      "",
+      "Future<bool> save${1/(.*)/${1:/capitalize}/}(double ${1:latitude}) {",
+      "  return _sharedPreference.setDouble(key${1/(.*)/${1:/capitalize}/}, ${1:latitude});",
+      "}"
+    ],
+    "description": "Create Preference Getter Setter (double)"
+  },
+  "stateNotifierTest": {
+    "prefix": "nt",
+    "body": [
+      "group('test', () {",
+      "  final seed = _${TM_FILENAME_BASE/(.*)_view_model_test/${1:/camelcase}/}State(const ${TM_FILENAME_BASE/(.*)_view_model_test/${1:/pascalcase}/}State());",
+      "",
+      "  stateNotifierTest(",
+      "    'when ',",
+      "    seed: () => [seed],",
+      "    setUp: () {",
+      "      ",
+      "    },",
+      "    actions: (vm) => vm.,",
+      "    expect: () {",
+      "      return [seed];",
+      "    },",
+      "    verify: (vm) {",
+      "",
+      "    },",
+      "    build: () => ${TM_FILENAME_BASE/(.*)_test/${1:/camelcase}/},",
+      "  );",
+      "});"
+    ],
+    "description": "stateNotifierTest"
+  },
+  "Create a Golden tests": {
+    "prefix": "gt",
+    "body": [
+      "testGoldens(",
+      "  TestUtil.description('when '),",
+      "  (tester) async {",
+      "    await tester.testWidgetWithDeviceBuilder(",
+      "      filename: '${TM_FILENAME_BASE/(.*)_test/${1}/}/${TestUtil.filename('when_')}',",
+      "      widget: const ${TM_FILENAME_BASE/(.*)_test/${1:/pascalcase}/}(),",
+      "      overrides: [",
+      "        ${TM_FILENAME_BASE/(.*)_page_test/${1:/camelcase}/}ViewModelProvider.overrideWith(",
+      "          (_) => Mock${TM_FILENAME_BASE/(.*)_page_test/${1:/pascalcase}/}ViewModel(",
+      "            const CommonState(",
+      "              data: ${TM_FILENAME_BASE/(.*)_page_test/${1:/pascalcase}/}State(),",
+      "            ),",
+      "          ),",
+      "        ),",
+      "      ],",
+      "    );",
+      "  },",
+      ");"
+    ],
+    "description": "Create a Golden tests"
+  },
+  "Create a Golden tests for Providers with family": {
+    "prefix": "gtf",
+    "body": [
+      "testGoldens(",
+      "  TestUtil.description('when '),",
+      "  (tester) async {",
+      "    await tester.testWidgetWithDeviceBuilder(",
+      "      filename: '${TM_FILENAME_BASE/(.*)_test/${1}/}/${TestUtil.filename('when_')}',",
+      "      widget: const ${TM_FILENAME_BASE/(.*)_test/${1:/pascalcase}/}(),",
+      "      overrides: [",
+      "        ${TM_FILENAME_BASE/(.*)_page_test/${1:/camelcase}/}ViewModelProvider.overrideWith(",
+      "          (_, __) => Mock${TM_FILENAME_BASE/(.*)_page_test/${1:/pascalcase}/}ViewModel(",
+      "            const CommonState(",
+      "              data: ${TM_FILENAME_BASE/(.*)_page_test/${1:/pascalcase}/}State(),",
+      "            ),",
+      "          ),",
+      "        ),",
+      "      ],",
+      "    );",
+      "  },",
+      ");"
+    ],
+    "description": "Create a Golden tests 2"
+  },
+  "padding all": {
+    "prefix": "pa",
+    "body": [
+      "EdgeInsets.all(${1:16}.rps)"
+    ],
+    "description": "padding all"
+  },
+  "padding horizontal": {
+    "prefix": "ph",
+    "body": [
+      "EdgeInsets.symmetric(",
+      "    horizontal: ${1:16}.rps,",
+      ")"
+    ],
+    "description": "padding horizontal"
+  },
+  "padding vertical": {
+    "prefix": "pv",
+    "body": [
+      "EdgeInsets.symmetric(",
+      "    vertical: ${1:16}.rps,",
+      ")"
+    ],
+    "description": "padding vertical"
+  },
+  "padding only": {
+    "prefix": "po",
+    "body": [
+      "EdgeInsets.only(${1|top,bottom,left,right|}: ${2:16}.rps)"
+    ],
+    "description": "padding symmetric"
+  },
+  "SizedBox width": {
+    "prefix": "sw",
+    "body": [
+      "SizedBox(width: ${1:16}.rps),"
+    ],
+    "description": "SizedBox width"
+  },
+  "SizedBox height": {
+    "prefix": "sh",
+    "body": [
+      "SizedBox(height: ${1:16}.rps),"
+    ],
+    "description": "SizedBox height"
+  },
+  "fake image url": {
+    "prefix": "fi",
+    "body": [
+      "https://cdn.pixabay.com/photo/2012/08/27/14/19/mountains-55067_1280.png"
+    ],
+    "description": "fake image url"
+  },
+  "dimen": {
+    "prefix": "di",
+    "body": [
+      "${1:16}.rps"
+    ],
+    "description": "dimen"
+  },
+  "TextStyle": {
+    "prefix": "st",
+    "body": [
+      "style(",
+      "  fontSize: ${1:14}.rps,",
+      "  color: color.${2:black},",
+      ")"
+    ],
+    "description": "TextStyle"
+  },
+  "l10n": {
+    "prefix": "ln",
+    "body": [
+      "l10n.${1:login}"
+    ],
+    "description": "l10n"
+  },
+  "color": {
+    "prefix": "co",
+    "body": [
+      "color.${1:black}"
+    ],
+    "description": "color"
+  },
+  "image": {
+    "prefix": "img",
+    "body": [
+      "image.${1:logo}"
+    ],
+    "description": "image"
+  },
+  "useEffect": {
+    "prefix": "ue",
+    "body": [
+      "useEffect(",
+      "  () {",
+      "    Future.microtask(() {",
+      "      ",
+      "    });",
+      "",
+      "    return null;",
+      "  },",
+      "  [],",
+      ");"
+    ],
+    "description": "useEffect"
+  },
+  "showDialog": {
+    "prefix": "sd",
+    "body": [
+      "await ref.nav.showDialog(",
+      "  CommonPopup.xxx(),",
+      ");"
+    ],
+    "description": "showDialog"
+  },
+  "showSnackBar": {
+    "prefix": "ssb",
+    "body": [
+      "ref.nav.showSnackBar(CommonPopup.xxx());"
+    ],
+    "description": "showSnackBar"
+  },
+  "showBottomSheet": {
+    "prefix": "sbs",
+    "body": [
+      "await ref.nav.showModalBottomSheet(",
+      "  CommonPopup.xxx(),",
+      ");"
+    ],
+    "description": "showBottomSheet"
+  },
+  "SchedulerBinding": {
+    "prefix": "sb",
+    "body": [
+      "SchedulerBinding.instance.addPostFrameCallback((_) {",
+      "",
+      "});"
+    ],
+    "description": "SchedulerBinding"
+  },
+  "runCatching": {
+    "prefix": "rc",
+    "body": [
+      "await runCatching(",
+      " action: () async {",
+      "   ",
+      " },",
+      ");"
+    ],
+    "description": "runCatching"
+  },
+  "StatelessWidget": {
+    "prefix": "sl",
+    "body": [
+      "import 'package:flutter/material.dart';",
+      "",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends StatelessWidget {",
+      "  const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({",
+      "    super.key,",
+      "  });",
+      "",
+      "  @override",
+      "  Widget build(BuildContext context) {",
+      "    return SizedBox();",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "StatelessWidget"
+  },
+  "StatefulWidget": {
+    "prefix": "sf",
+    "body": [
+      "import 'package:flutter/material.dart';",
+      "",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends StatefulWidget {",
+      "  const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({",
+      "    super.key,",
+      "  });",
+      "",
+      "  @override",
+      "  _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}State createState() => _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}State();",
+      "}",
+      "",
+      "class _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}State extends State<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}> {",
+      "  @override",
+      "  Widget build(BuildContext context) {",
+      "    return SizedBox();",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "StatefulWidget"
+  },
+  "HookWidget": {
+    "prefix": "hk",
+    "body": [
+      "import 'package:flutter/material.dart';",
+      "import 'package:flutter_hooks/flutter_hooks.dart';",
+      "",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends HookWidget {",
+      "  const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({",
+      "    super.key,",
+      "  });",
+      "",
+      "  @override",
+      "  Widget build(BuildContext context) {",
+      "    return SizedBox();",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "HookWidget"
+  },
+  "HookConsumerWidget": {
+    "prefix": "hc",
+    "body": [
+      "import 'package:flutter/material.dart';",
+      "import 'package:hooks_riverpod/hooks_riverpod.dart';",
+      "",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends HookConsumerWidget {",
+      "  const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({",
+      "    super.key,",
+      "  });",
+      "",
+      "  @override",
+      "  Widget build(BuildContext context, WidgetRef ref) {",
+      "    return SizedBox();",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "HookConsumerWidget"
+  },
+  "StatefulHookConsumerWidget": {
+    "prefix": "hs",
+    "body": [
+      "import 'package:flutter/material.dart';",
+      "import 'package:hooks_riverpod/hooks_riverpod.dart';",
+      "",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends StatefulHookConsumerWidget {",
+      "  const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({",
+      "    super.key,",
+      "  });",
+      "",
+      "  @override",
+      "  ConsumerState<ConsumerStatefulWidget> createState() {",
+      "    return _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}State();",
+      "  }",
+      "}",
+      "",
+      "class _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}State extends ConsumerState<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}> {",
+      "  @override",
+      "  Widget build(BuildContext context) {",
+      "    return SizedBox();",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "StatefulHookConsumerWidget"
+  },
+  "BasePage": {
+    "prefix": "bp",
+    "body": [
+      "import 'package:auto_route/auto_route.dart';",
+      "import 'package:flutter/material.dart';",
+      "import 'package:hooks_riverpod/hooks_riverpod.dart';",
+      "",
+      "import '../../../index.dart';",
+      "",
+      "@RoutePage()",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends BasePage<${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}State,",
+      "    AutoDisposeStateNotifierProvider<${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}ViewModel, CommonState<${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}State>>> {",
+      "  const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({super.key});",
+      "      ",
+      "  @override",
+      "  AutoDisposeStateNotifierProvider<${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}ViewModel, CommonState<${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}State>> get provider =>",
+      "      ${TM_FILENAME_BASE/(.*)_page/${1:/camelcase}/}ViewModelProvider;",
+      "",
+      "  @override",
+      "  Widget buildPage(BuildContext context, WidgetRef ref) {",
+      "    return CommonScaffold(",
+      "      body: Center(",
+      "",
+      "      ),",
+      "    );",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "BasePage"
+  },
+  "BaseStatefulPage": {
+    "prefix": "bs",
+    "body": [
+      "import 'package:auto_route/auto_route.dart';",
+      "import 'package:flutter/material.dart';",
+      "import 'package:hooks_riverpod/hooks_riverpod.dart';",
+      "",
+      "import '../../../index.dart';",
+      "",
+      "@RoutePage()",
+      "class ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/} extends StatefulHookConsumerWidget {",
+      "  const ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}({super.key});",
+      "",
+      "  @override",
+      "  ConsumerState<ConsumerStatefulWidget> createState() {",
+      "    return _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}State();",
+      "  }",
+      "}",
+      "",
+      "class _${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}State extends BaseStatefulPageState<${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}State, ${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}ViewModel,",
+      "    AutoDisposeStateNotifierProvider<${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}ViewModel, CommonState<${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}State>>, ${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}Page> {",
+      "  @override",
+      "  AutoDisposeStateNotifierProvider<${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}ViewModel, CommonState<${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}State>> get provider =>",
+      "      ${TM_FILENAME_BASE/(.*)_page/${1:/camelcase}/}ViewModelProvider;",
+      "",
+      "  @override",
+      "  ${TM_FILENAME_BASE/(.*)_page/${1:/pascalcase}/}ViewModel get vm => ref.read(provider.notifier);",
+      "",
+      "  @override",
+      "  Widget buildPage(BuildContext context) {",
+      "    return SizedBox();",
+      "  }",
+      "}",
+      ""
+    ],
+    "description": "BaseStatefulPage"
+  }
+}

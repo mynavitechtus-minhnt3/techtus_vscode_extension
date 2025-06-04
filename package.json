@@ -106,35 +106,7 @@
     "snippets": [
       {
         "language": "dart",
-        "path": "./snippets/view_model.json"
-      },
-      {
-        "language": "dart",
-        "path": "./snippets/others.json"
-      },
-      {
-        "language": "dart",
-        "path": "./snippets/ui.json"
-      },
-      {
-        "language": "dart",
-        "path": "./snippets/data_model.json"
-      },
-      {
-        "language": "dart",
-        "path": "./snippets/mapper.json"
-      },
-      {
-        "language": "dart",
-        "path": "./snippets/shared_pref.json"
-      },
-      {
-        "language": "dart",
-        "path": "./snippets/test.json"
-      },
-      {
-        "language": "dart",
-        "path": "./snippets/widget.json"
+        "path": "./snippets/snippet.json"
       }
     ]
   },
