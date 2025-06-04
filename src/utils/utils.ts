@@ -582,3 +582,32 @@ export function getDefaultValueByType(v: string): string {
     // Object
     return (valueType) + "()";
 }
+
+export const relativize = (filePath: string, importPath: string, pathSep: string) => {
+    const dartSep = '/';
+    const pathSplit = (path: string, sep: string) => path.length === 0 ? [] : path.split(sep);
+    const fileBits = pathSplit(filePath, pathSep);
+    const importBits = pathSplit(importPath, dartSep);
+    let dotdotAmount = 0, startIdx;
+    for (startIdx = 0; startIdx < fileBits.length; startIdx++) {
+        if (fileBits[startIdx] === importBits[startIdx]) {
+            continue;
+        }
+        dotdotAmount = fileBits.length - startIdx;
+        break;
+    }
+    const relativeBits = new Array(dotdotAmount).fill('..').concat(importBits.slice(startIdx));
+    return relativeBits.join(dartSep);
+};
+
+export function genFile(
+  folder: string,
+  filename: string,
+  content: string
+): Promise<void> {
+  if (!fs.existsSync(folder)) {
+    fs.mkdirSync(folder);
+  }
+
+  return writeFile(`${folder}/${filename}`, content);
+}

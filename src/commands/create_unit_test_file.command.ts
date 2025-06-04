@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as vscode from "vscode";
 import * as changeCase from "change-case";
 import { openFile, readFile, writeFile } from "../utils/utils";
-import { configResolver } from "./fix_imports.command";
+import { configResolver } from "../utils/configResolver";
 
 export const createUTFile = async () => {
   const currentFile = vscode.window.activeTextEditor!.document.uri;

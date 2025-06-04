@@ -1,10 +1,14 @@
-import * as vscode from "vscode";
-import * as lo from "lodash";
 import * as changeCase from "change-case";
 import * as fs from "fs";
+import * as lo from "lodash";
+import * as vscode from "vscode";
 import { getRiverpodTemplates } from "../templates/riverpodTemplateManager";
-import { showPrompt, writeFile, fetchPackageInfoFor } from "../utils/utils";
-import { configResolver } from "./fix_imports.command";
+import { configResolver } from "../utils/configResolver";
+import {
+  fetchPackageInfoFor,
+  genFile,
+  showPrompt
+} from "../utils/utils";
 import { autoExport } from "./auto_export.command";
 
 export const createNewPage = async () => {
@@ -64,15 +68,3 @@ export const createNewPage = async () => {
   await autoExport();
   vscode.window.showInformationMessage("Done!");
 };
-
-function genFile(
-  folder: string,
-  filename: string,
-  content: string
-): Promise<void> {
-  if (!fs.existsSync(folder)) {
-    fs.mkdirSync(folder);
-  }
-
-  return writeFile(`${folder}/${filename}`, content);
-}

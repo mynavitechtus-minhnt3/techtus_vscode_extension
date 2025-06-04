@@ -5,7 +5,6 @@ import { autoExport } from "./commands/auto_export.command";
 import { transformFromClipboardToDataModel } from "./commands/clipboard_to_data_model.command";
 import { createUTFile } from "./commands/create_unit_test_file.command";
 import { extractApiUrl } from "./commands/extract_api_url.command";
-import { configChanges, documentSave } from "./commands/fix_imports.command";
 import { jsonToDataModel } from "./commands/json_to_data_model.command";
 import { jsonToParams } from "./commands/json_to_params.command";
 import { createNewPage } from "./commands/new_riverpod_page.command";
@@ -28,6 +27,7 @@ import {
   wrapWithStack,
   wrapWithVerticalPadding,
 } from "./commands/wrap_widget/wrap_with_widget.command";
+import { configChanges, documentSave } from "./utils/configResolver";
 
 const DART_MODE = { language: "dart", scheme: "file" };
 
@@ -39,9 +39,6 @@ export function activate(context: vscode.ExtensionContext) {
       "mynavimobiletool.createNewPage",
       createNewPage
     ),
-    // vscode.commands.registerCommand("mynavimobiletool.transformParams", transformParams),
-    // vscode.commands.registerCommand('mynavimobiletool.fixImport', fixImport),
-    // vscode.commands.registerCommand('mynavimobiletool.fixAllImports', fixAllImports),
     vscode.commands.registerCommand(
       "mynavimobiletool.jsonToDataModel",
       jsonToDataModel
