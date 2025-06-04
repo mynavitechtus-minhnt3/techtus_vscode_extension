@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
+import * as copyPaste from "copy-paste";
+import { jsonc } from "jsonc";
 
 export const currentFile = () => vscode.window.activeTextEditor!.document.uri;
 export const currentPath = () => currentFile().path;
@@ -611,3 +613,52 @@ export function genFile(
 
   return writeFile(`${folder}/${filename}`, content);
 }
+
+function existsSync(path: string): boolean {
+  return fs.existsSync(path);
+}
+
+export function getClipboardText(): Promise<string> {
+  return new Promise<string>((resolve, reject) => {
+    copyPaste.paste((err, text) => {
+      if (err !== null) {
+        reject(err);
+      }
+      resolve(text);
+    });
+  });
+}
+
+export function handleError(error: Error) {
+  const text = error.message;
+  vscode.window.showErrorMessage(text);
+}
+
+export const validateJSON = (text: any) => {
+  if (!text.trim().startsWith("{")) {
+    text = `{${text}`;
+  }
+  if (!text.trim().endsWith("}")) {
+    if (text.trim().endsWith(",")) {
+      text = text.trim().substring(0, text.trim().length - 1);
+    }
+    text = `${text}}`;
+  }
+
+  console.log(`validateJSON: ${text}`);
+  const [err, result] = jsonc.safe.parse(text.trim());
+
+  if (text.length === 0) {
+    return Promise.reject(new Error("Error: Empty Json"));
+  } else {
+    if (err) {
+      return Promise.reject(
+        new Error(
+          `Parsing Json failed. This is not a Json: ${err.name}: ${err.message}`
+        )
+      );
+    } else {
+      return Promise.resolve(JSON.stringify(result) as any);
+    }
+  }
+};

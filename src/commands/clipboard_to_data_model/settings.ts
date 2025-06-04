@@ -50,19 +50,13 @@ export interface ISettings {
 export class Settings implements ISettings {
     model: ClassNameModel;
     targetDirectory: string;
-    // entityDirectory: string;
     json: string;
 
     constructor(settings: ISettings) {
         this.model = settings.model;
         this.json = settings.json;
         this.targetDirectory = buildTargetDirectory(settings);
-        // this.genEntity = settings.genEntity;
-        // this.genMapper = settings.genMapper;
-        // this.entityDirectory = toPosixPath(settings.entityDirectory);
     }
-    // genEntity: boolean;
-    // genMapper: boolean;
 }
 
 const buildTargetDirectory = (settings: ISettings): string => {

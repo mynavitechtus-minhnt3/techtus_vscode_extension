@@ -2,6 +2,7 @@ import * as _ from "lodash";
 import { URL } from "url";
 import * as changeCase from "change-case";
 import * as vscode from "vscode";
+import { getTypeByValue } from "../utils/utils";
 
 export const extractApiUrl = async () => {
   if (vscode.window.activeTextEditor == null) {
@@ -112,37 +113,4 @@ function doTransform(text: string): string {
   });
 
   return `Future<XXX> get(${p.length == 0 ? '' : '{\n'}${p}${p.length == 0 ? '' : '}'}) {\nreturn authAppServerClient.request(\nmethod: RestMethod.get,\npath: '${path}'${p.length == 0 ? '' : ',\nqueryParameters: {\n'}${q}${p.length == 0 ? '' : '}'},\n// decoder: XXX.fromJson,\n// successResponseMapperType: SuccessResponseMapperType.yyy,\n);\n}`;
-}
-
-function getTypeByValue(v: string): string {
-  // return 'dynamic';
-
-  const value = v.trim();
-  if (value.startsWith('"')) {
-    return "String";
-  }
-
-  if (value.startsWith("true") || value.startsWith("false")) {
-    return "bool";
-  }
-
-  if (value.startsWith("[")) {
-    const arr = value.split(",");
-    if (arr.length == 0) {
-      return "dynamic";
-    }
-    return `List<${getTypeByValue(
-      arr[0].trim().replace("[", "").replace("]", "")
-    )}>`;
-  }
-
-  if (value.match(RegExp("^\\d+\\.\\d+$")) != null) {
-    return "double";
-  }
-
-  if (value.match(RegExp("^\\d+$")) != null) {
-    return "int";
-  }
-
-  return "String";
 }
