@@ -11,10 +11,10 @@ import { createNewPage } from "./commands/new_riverpod_page.command";
 import {
   convertBasePageToBaseStatefulPage,
   convertBaseStatefulPageToBasePage,
-} from "./commands/riverpod/commands/convert_from_base_page";
-import RiverpodCodeActionProvider from "./commands/riverpod/provider/riverpod_code_action_provider";
+} from "./commands/convert_from_base_page.command";
+import { ConvertBasePageCodeActionProvider } from "./code_actions/convert_base_page_code_action_provider";
 import { translateAndExtractValueToArbFiles } from "./commands/translate_and_extract_value_to_arb/translate_and_extract_value_to_arb.command";
-import { ConsumerCodeActionProvider } from "./commands/wrap_widget/consumer-code-action-provider";
+import { WrapWithConsumerCodeActionProvider } from "./code_actions/wrap_with_consumer_code_action_provider";
 import {
   wrapWithCommonContainer,
   wrapWithConsumer,
@@ -26,7 +26,7 @@ import {
   wrapWithSingleChildScrollView,
   wrapWithStack,
   wrapWithVerticalPadding,
-} from "./commands/wrap_widget/wrap_with_widget.command";
+} from "./commands/wrap_with_widget.command";
 import { configChanges, documentSave } from "./utils/configResolver";
 
 const DART_MODE = { language: "dart", scheme: "file" };
@@ -68,11 +68,11 @@ export function activate(context: vscode.ExtensionContext) {
     documentSave,
     vscode.languages.registerCodeActionsProvider(
       "dart",
-      new RiverpodCodeActionProvider()
+      new ConvertBasePageCodeActionProvider()
     ),
     vscode.languages.registerCodeActionsProvider(
       "dart",
-      new ConsumerCodeActionProvider()
+      new WrapWithConsumerCodeActionProvider()
     ),
     vscode.commands.registerCommand(
       "mynavimobiletool.wrapWithConsumer",

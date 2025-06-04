@@ -1,4 +1,4 @@
-import { wrapWith } from "../../utils/utils";
+import { wrapWith } from "../utils/utils";
 
 const consumerSnippet = (widget: string) => {
   return `Consumer(

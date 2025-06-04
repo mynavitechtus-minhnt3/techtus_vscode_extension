@@ -1,7 +1,7 @@
 import { window, CodeAction, CodeActionProvider, CodeActionKind } from "vscode";
-import { getSelectedText } from "../../utils/utils";
+import { getSelectedText } from "../utils/utils";
 
-export class ConsumerCodeActionProvider implements CodeActionProvider {
+export class WrapWithConsumerCodeActionProvider implements CodeActionProvider {
   public provideCodeActions(): CodeAction[] {
     const editor = window.activeTextEditor;
     if (!editor) return [];
