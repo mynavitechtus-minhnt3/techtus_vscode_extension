@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 import * as yaml from 'yaml';
-import { AddMessageInStatus } from '../shared/configuration';
-import { resolvePath } from '../shared/resolvePath';
+import { resolvePath } from '../utils/utils';
 
 async function findYamlFiles(projectName: string, yamlFileName: string): Promise<vscode.Uri[]> {
   const yamlFiles = await vscode.workspace.findFiles(`**/${projectName}/${yamlFileName}`);

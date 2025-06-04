@@ -1,6 +1,49 @@
-import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
+import * as vscode from "vscode";
+
+class StringEscapeSequence {
+  private readonly unescapedStringRegex: RegExp;
+
+  constructor(readonly start: string) {
+    this.unescapedStringRegex = new RegExp(
+      `^${start}([\\s\\S]*?)${start.replace("r", "")}$`,
+      "iu"
+    );
+  }
+
+  getUnescapedString = (input: string): string =>
+    (input.match(this.unescapedStringRegex) ?? [])[1].replace(/\\n/gu, "\n");
+}
+
+export const escapeSequences = [
+  'r"""',
+  "r'''",
+  'r"',
+  "r'",
+  '"""',
+  "'''",
+  '"',
+  "'",
+].map((start) => new StringEscapeSequence(start));
+
+export const getUnescapedString = (input: string): string =>
+  escapeSequences
+    .find((e) => input.startsWith(e.start))
+    ?.getUnescapedString(input) ?? "";
+
+export const extractInterpolatedVariables = (input: string): string[] =>
+  Array.from(input.matchAll(/\$\{?([^\s{}]+)\}?/gu), (match) => match[1]);
+
+const PARENT_DIRECTORY = "..";
+
+export const resolvePath = (inputPath: string): string =>
+  path.join(
+    ...path
+      .normalize(inputPath)
+      .split(path.sep)
+      .filter((segment) => segment !== PARENT_DIRECTORY)
+  );
 
 export const currentFile = () => vscode.window.activeTextEditor!.document.uri;
 export const currentPath = () => currentFile().path;
@@ -60,7 +103,10 @@ export function openFile(path: string) {
   return vscode.commands.executeCommand("vscode.open", vscode.Uri.file(path));
 }
 
-export async function showInputBox(title: string, value: string): Promise<string> {
+export async function showInputBox(
+  title: string,
+  value: string
+): Promise<string> {
   const disposables: vscode.Disposable[] = [];
   try {
     return await new Promise<string>((resolve) => {
@@ -130,7 +176,9 @@ export const camelize = (value: string): string =>
     )
     .join("");
 
-export const getSelectedText = (editor: vscode.TextEditor): vscode.Selection => {
+export const getSelectedText = (
+  editor: vscode.TextEditor
+): vscode.Selection => {
   const emptySelection = new vscode.Selection(
     editor.document.positionAt(0),
     editor.document.positionAt(0)
@@ -148,7 +196,9 @@ export const getSelectedText = (editor: vscode.TextEditor): vscode.Selection => 
   );
 
   let widgetStartIndex =
-    openBracketIndex > 1 ? openBracketIndex - 1 : editor.selection.anchor.character;
+    openBracketIndex > 1
+      ? openBracketIndex - 1
+      : editor.selection.anchor.character;
   for (widgetStartIndex; widgetStartIndex > 0; widgetStartIndex--) {
     const currentChar = lineText.charAt(widgetStartIndex);
     const isBeginningOfWidget =
@@ -207,7 +257,7 @@ export const findPubspec = async (activeFileUri: vscode.Uri) => {
   const allPubspecUris = await vscode.workspace.findFiles("**/pubspec.yaml");
   return allPubspecUris.filter((pubspecUri) => {
     const packageRootUri =
-      (pubspecUri.with({ path: path.dirname(pubspecUri.path) }) + "/");
+      pubspecUri.with({ path: path.dirname(pubspecUri.path) }) + "/";
 
     return activeFileUri.toString().startsWith(packageRootUri.toString());
   });
