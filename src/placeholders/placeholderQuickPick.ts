@@ -1,5 +1,5 @@
 import { PlaceholderType, PlaceholderTypeItem, getPlaceholderType, getPlaceholderTypes } from './placeholderType';
-import { showQuickPick } from '../quickPick/showQuickPick';
+import { showQuickPick } from '../utils/utils';
 
 export async function showPlaceholderQuickPick(variable: string): Promise<PlaceholderType> {
   const placeholderTypeValue = await showQuickPick(

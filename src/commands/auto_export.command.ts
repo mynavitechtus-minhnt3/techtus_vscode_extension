@@ -1,8 +1,8 @@
 import * as _ from "lodash";
 import * as vscode from "vscode";
 import * as path from 'path';
-import { fetchPackageInfoFor } from "./auto_fix_imports/convert_to_relative_import";
-import { writeFile } from "./clipboard_to_data_model.command";
+import { fetchPackageInfoFor } from "../utils/utils";
+import { writeFile, readFile } from "../utils/utils";
 import { configResolver } from "./fix_imports.command";
 import * as fs from 'fs';
 
@@ -63,16 +63,4 @@ export async function writeExport(excludeExt, barrier, libFolder) {
             await writeFile(indexFilePath, filesUris.map((e) => `export '${e.path.substring(e.path.indexOf(`${moduleFolder}`) + `${moduleFolder}`.length)}';`).sort().join("\n") + '\n')
         }
     }
-}
-
-export function readFile(path: string): Promise<string> {
-    return new Promise<string>((resolve, reject) => {
-        fs.readFile(path, 'utf8', (err, data) => {
-            if (err) {
-                reject(new Error(`Couldn't read file due to error: ${err}`));
-            } else {
-                resolve(data);
-            }
-        });
-    });
 }

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { notInclude, validDateFormats } from './dateFormat';
-import { LionizationPickItem } from '../quickPick/showQuickPick';
+import { LionizationPickItem } from '../utils/utils';
 
 export async function showDateFormatQuickPick(variable: string): Promise<string> {
   const disposables: vscode.Disposable[] = [];

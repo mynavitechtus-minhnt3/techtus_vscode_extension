@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { EditorAccess, VSCodeEditorAccess } from "./editor_access";
+import { fetchPackageInfoFor, findPubspec } from "../../utils/utils";
 
 const relativize = (filePath: string, importPath: string, pathSep: string) => {
     const dartSep = '/';
@@ -64,48 +65,6 @@ const fixImports = async (editor: EditorAccess, packageInfo: PackageInfo, pathSe
     return count;
 };
 
-const findPubspec = async (activeFileUri: vscode.Uri) => {
-    const allPubspecUris = await vscode.workspace.findFiles('**/pubspec.yaml');
-    return allPubspecUris.filter((pubspecUri) => {
-        const packageRootUri = pubspecUri.with({
-            path: path.dirname(pubspecUri.path),
-        }) + '/';
-
-        return activeFileUri.toString().startsWith(packageRootUri.toString());
-    });
-};
-
-const fetchPackageInfoFor = async (activeDocumentUri: vscode.Uri): Promise<PackageInfo | null> => {
-    const pubspecUris = await findPubspec(activeDocumentUri);
-    // if (pubspecUris.length !== 1) {
-    //     vscode.window.showErrorMessage(
-    //         `Expected to find a single pubspec.yaml file above ${activeDocumentUri}, ${pubspecUris.length} found.`,
-    //     );
-    //     return null;
-    // }
-
-    const pubspec: vscode.TextDocument = await vscode.workspace.openTextDocument(pubspecUris[0]);
-    const projectRoot = path.dirname(pubspec.fileName);
-    const possibleNameLines = pubspec.getText().split('\n').filter((line: string) => line.match(/^name:/));
-    if (possibleNameLines.length !== 1) {
-        vscode.window.showErrorMessage(
-            `Expected to find a single line starting with 'name:' on pubspec.yaml file, ${possibleNameLines.length} found.`,
-        );
-        return null;
-    }
-    const nameLine = possibleNameLines[0];
-    const packageNameMatch = /^name:\s*(.*)$/mg.exec(nameLine);
-    if (!packageNameMatch) {
-        vscode.window.showErrorMessage(
-            `Expected line 'name:' on pubspec.yaml to match regex, but it didn't (line: ${nameLine}).`,
-        );
-        return null;
-    }
-    return {
-        projectRoot: projectRoot,
-        projectName: packageNameMatch[1].trim(),
-    };
-};
 
 const runFixImportTask = async (rawEditor: vscode.TextEditor) => {
     const packageInfo = await fetchPackageInfoFor(rawEditor.document.uri);
@@ -133,4 +92,4 @@ const runFixImportTask = async (rawEditor: vscode.TextEditor) => {
     }
 };
 
-export { relativize, fixImports, runFixImportTask, fetchPackageInfoFor, findPubspec };
+export { relativize, fixImports, runFixImportTask };

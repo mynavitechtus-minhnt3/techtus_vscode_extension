@@ -2,7 +2,8 @@ import * as path from 'path';
 import * as vscode from "vscode";
 import { autoExport } from './auto_export.command';
 import { ConfigResolver } from "./auto_fix_imports/configResolver";
-import { fetchPackageInfoFor, fixImports, runFixImportTask } from "./auto_fix_imports/convert_to_relative_import";
+import { fixImports, runFixImportTask } from "./auto_fix_imports/convert_to_relative_import";
+import { fetchPackageInfoFor } from "../utils/utils";
 import { VSCodeEditorAccess } from "./auto_fix_imports/editor_access";
 
 export let configResolver = new ConfigResolver();

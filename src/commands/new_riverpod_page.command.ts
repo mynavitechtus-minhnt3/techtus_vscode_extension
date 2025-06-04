@@ -3,8 +3,7 @@ import * as lo from "lodash";
 import * as changeCase from "change-case";
 import * as fs from "fs";
 import { getRiverpodTemplates } from "../templates/riverpodTemplateManager";
-import { showPrompt, writeFile } from "../utils/utils";
-import { fetchPackageInfoFor } from "./auto_fix_imports/convert_to_relative_import";
+import { showPrompt, writeFile, fetchPackageInfoFor } from "../utils/utils";
 import { configResolver } from "./fix_imports.command";
 import { autoExport } from "./auto_export.command";
 

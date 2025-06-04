@@ -9,7 +9,7 @@ import { jsonc } from 'jsonc';
 import { ClassNameModel, Settings } from "./clipboard_to_data_model/settings";
 import { ModelGenerator } from "./clipboard_to_data_model/model-generator";
 import { ClassDefinition } from "./clipboard_to_data_model/syntax";
-import { fetchPackageInfoFor } from "./auto_fix_imports/convert_to_relative_import";
+import { fetchPackageInfoFor } from "../utils/utils";
 import { configResolver } from "./fix_imports.command";
 import { getDataMapperTemplate } from "../templates/data-mapper.template";
 import { getEntityTemplate } from "../templates/entity.template";
@@ -89,60 +89,6 @@ export const promptForBaseClassName = (): Thenable<string | undefined> => {
     return window.showInputBox(classNamePromptOptions);
 };
 
-export async function promptForMapperGen(): Promise<boolean> {
-    const selection = await window.showQuickPick(
-        [
-            {
-                label: 'Yes',
-                picked: true,
-            },
-            { label: 'No' },
-        ],
-        { placeHolder: 'Gen mapper classes?' }
-    );
-
-    switch (selection?.label) {
-        case 'Yes':
-            return true;
-        default:
-            return false;
-    }
-} 
-
-export async function promptForEntityGen(): Promise<boolean> {
-    const selection = await window.showQuickPick(
-        [
-            {
-                label: 'Yes',
-                picked: true,
-            },
-            { label: 'No' },
-        ],
-        { placeHolder: 'Gen entity classes?' }
-    );
-
-    switch (selection?.label) {
-        case 'Yes':
-            return true;
-        default:
-            return false;
-    }
-} 
-
-export const promptForTargetDirectory = async (): Promise<string | undefined> => {
-    const options: OpenDialogOptions = {
-        canSelectMany: false,
-        openLabel: "Select a folder to create the classes in",
-        canSelectFolders: true,
-    };
-
-    return window.showOpenDialog(options).then((uri) => {
-        if (_.isNil(uri) || _.isEmpty(uri)) {
-            return undefined;
-        }
-        return uri![0].fsPath;
-    });
-};
 
 export function getClipboardText(): Promise<string> {
     return new Promise<string>((resolve, reject) => {
@@ -201,7 +147,7 @@ export async function createClass(settings: Settings) {
         // const mapperFile = path.join(`${settings.targetDirectory}/mapper`, mapperFileName);
         // const entityFile = path.join(`${settings.entityDirectory}`, entityFileName);
 
-        if (existsSync(file)) {
+        if (fs.existsSync(file)) {
             window.showInformationMessage(`The file ${fileName} does exist`);
         } else {
             const data = classDef.toCodeGenString();
@@ -231,9 +177,6 @@ export async function createClass(settings: Settings) {
     }
 }
 
-function existsSync(path: string): boolean {
-    return fs.existsSync(path);
-}
 
 export function writeFile(path: string, data: string) {
     return new Promise<void>((resolve, reject) => {
