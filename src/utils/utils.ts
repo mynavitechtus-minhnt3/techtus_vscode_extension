@@ -1,20 +1,39 @@
-import * as vscode from "vscode";
-import * as fs from "fs";
-import * as path from "path";
 import * as copyPaste from "copy-paste";
+import * as fs from "fs";
 import { jsonc } from "jsonc";
+import * as path from "path";
+import * as vscode from "vscode";
 
+export const currentFile = () => vscode.window.activeTextEditor!.document.uri;
+export const currentPath = () => currentFile().path;
+export const currentFileName = () =>
+  currentPath().substring(
+    currentPath().lastIndexOf("/") + 1,
+    currentPath().lastIndexOf(".")
+  );
+export const selectedText = () =>
+  vscode.window.activeTextEditor!.document.getText(
+    vscode.window.activeTextEditor!.selection
+  );
+
+export function editSelection(newText: string) {
+  vscode.window.activeTextEditor?.edit((builder) => {
+    builder.replace(vscode.window.activeTextEditor!.selection, newText);
+  });
+}
 
 export function showPrompt(
   title: string,
-  placeholder: string
+  placeholder: string,
+  value?: string
 ): Thenable<string | undefined> {
-  const inputText: vscode.InputBoxOptions = {
+  const inputOptions: vscode.InputBoxOptions = {
     prompt: title,
     placeHolder: placeholder,
+    value: value,
   };
 
-  return vscode.window.showInputBox(inputText);
+  return vscode.window.showInputBox(inputOptions);
 }
 
 export function readFile(path: string): Promise<string> {
@@ -182,7 +201,6 @@ export const wrapWith = async (snippet: (widget: string) => string) => {
   editor.insertSnippet(new vscode.SnippetString(snippet(widget)), selection);
   await vscode.commands.executeCommand("editor.action.formatDocument");
 };
-
 
 export const camelize = (value: string): string =>
   value
@@ -480,74 +498,76 @@ export class Placeholder {
 }
 
 export function convertNullableTypeToNonNullableType(t: string): string {
-    if (t.endsWith("?")) {
-        return t.substring(0, t.length - 1);
-    }
+  if (t.endsWith("?")) {
+    return t.substring(0, t.length - 1);
+  }
 
-    return t
+  return t;
 }
 
 export function getTypeByValue(v: string): string {
-    // return 'dynamic';
+  // return 'dynamic';
 
-    const value = v.trim()
-    if (value.startsWith("\"")) {
-        return "String";
+  const value = v.trim();
+  if (value.startsWith('"')) {
+    return "String";
+  }
+
+  if (value.startsWith("true") || value.startsWith("false")) {
+    return "bool";
+  }
+
+  if (value.startsWith("[")) {
+    const arr = value.split(",");
+    if (arr.length == 0) {
+      return "dynamic";
     }
+    return `List<${getTypeByValue(
+      arr[0].trim().replace("[", "").replace("]", "")
+    )}>`;
+  }
 
-    if (value.startsWith("true") || value.startsWith("false")) {
-        return "bool";
-    }
+  if (value.match(RegExp("^\\d+\\.\\d+$")) != null) {
+    return "double";
+  }
 
-    if (value.startsWith("[")) {
-        const arr = value.split(",");
-        if (arr.length == 0) {
-            return "dynamic";
-        }
-        return `List<${getTypeByValue(arr[0].trim().replace("[", "").replace("]", ""))}>`;
-    }
+  if (value.match(RegExp("^\\d+$")) != null) {
+    return "int";
+  }
 
-    if (value.match(RegExp('^\\d+\\.\\d+$')) != null) {
-        return "double";
-    }
-
-
-    if (value.match(RegExp('^\\d+$')) != null) {
-        return 'int';
-    }
-
-    return "dynamic";
+  return "dynamic";
 }
 
 export function getDefaultValueByType(v: string): string {
-    const valueType = convertNullableTypeToNonNullableType(v.replace("required", "").trim())
-    switch (valueType) {
-        case "int":
-            return "0";
-        case "String":
-            return "''";
-        case "bool":
-            return "false";
-        case "double":
-            return "0.0";
-        case "dynamic":
-            return "null";
-    }
+  const valueType = convertNullableTypeToNonNullableType(
+    v.replace("required", "").trim()
+  );
+  switch (valueType) {
+    case "int":
+      return "0";
+    case "String":
+      return "''";
+    case "bool":
+      return "false";
+    case "double":
+      return "0.0";
+    case "dynamic":
+      return "null";
+  }
 
-    if (valueType.startsWith("List")) {
-        return "<" + (valueType.substring(5, valueType.length - 1)) + ">[]";
-    }
+  if (valueType.startsWith("List")) {
+    return "<" + valueType.substring(5, valueType.length - 1) + ">[]";
+  }
 
-    if (valueType.startsWith("Map")) {
-        const mapType = valueType.replace("Map", "").trim()
+  if (valueType.startsWith("Map")) {
+    const mapType = valueType.replace("Map", "").trim();
 
-        return convertNullableTypeToNonNullableType(mapType) + "{}"
-    }
+    return convertNullableTypeToNonNullableType(mapType) + "{}";
+  }
 
-    // Object
-    return (valueType) + "()";
+  // Object
+  return valueType + "()";
 }
-
 
 export function genFile(
   folder: string,
@@ -609,3 +629,47 @@ export const validateJSON = (text: any) => {
     }
   }
 };
+
+export function registerCodeAction(
+  commandTitle: string,
+  commandName: string,
+  document: vscode.TextDocument,
+  range: vscode.Range | vscode.Selection,
+  actions: vscode.CodeAction[]
+) {
+  const codeAction = new vscode.CodeAction(
+    commandTitle,
+    vscode.CodeActionKind.Refactor
+  );
+
+  codeAction.command = {
+    title: commandTitle,
+    command: commandName,
+    arguments: [document, range],
+  };
+
+  actions.push(codeAction);
+}
+
+export function indexFrom(
+  documentTextArray: string[],
+  regex: RegExp,
+  startingFrom: number
+) {
+  for (let i = startingFrom; i < documentTextArray.length; i++) {
+    if (regex.test(documentTextArray[i])) {
+      return i;
+    }
+  }
+
+  return -1;
+}
+
+export function replaceLine(
+  edit: vscode.WorkspaceEdit,
+  document: vscode.TextDocument,
+  range: vscode.Range,
+  newLineText: string
+) {
+  edit.replace(document.uri, range, newLineText);
+}

@@ -7,8 +7,7 @@ import {
   workspace,
   window,
 } from "vscode";
-import { indexFrom } from "../functions/index_from";
-import { replaceLine } from "../functions/replace_line";
+import { indexFrom, replaceLine } from "../utils/utils";
 
 export async function convertBasePageToBaseStatefulPage(
   document: TextDocument,
