@@ -97,9 +97,6 @@
       {
         "command": "mynavimobiletool.translateAndExtractValueToArbFiles",
         "title": "mynavi: Translate and extract value to arb files"
-      },{
-        "command": "mynavimobiletool.sortArbFiles",
-        "title": "mynavi: Sort arb files"
       }
     ],
     "menus": {

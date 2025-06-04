@@ -1,11 +1,9 @@
 /* eslint-disable no-await-in-loop */
-import { LionizationPickItem, showQuickPick, showInputBox, showDateFormatQuickPick, showPlaceholderQuickPick, includeInCustomPattern, includeInDecimalDigits, includeInSymbol, validNumberFormats, PlaceholderType, camelize } from "../utils/utils";
+import { LionizationPickItem, showQuickPick, showInputBox, showDateFormatQuickPick, showPlaceholderQuickPick, includeInCustomPattern, includeInDecimalDigits, includeInSymbol, validNumberFormats, PlaceholderType, camelize, Placeholder, extractInterpolatedVariables } from "../utils/utils";
 
 import { CommandParameters } from "../commands/translate_and_extract_value_to_arb/commandParameters";
 import { EditFilesParameters } from "../commands/translate_and_extract_value_to_arb/editFilesParameters";
 import { KeyValuePair } from "./keyValuePair";
-import { Placeholder } from "../placeholders/placeholder";
-import { extractInterpolatedVariables } from "../shared/parser/parser";
 
 async function getPlaceholder(variable: string) {
   const name = await showInputBox(

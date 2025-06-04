@@ -513,3 +513,72 @@ export class Placeholder {
     return this;
   }
 }
+
+export function convertNullableTypeToNonNullableType(t: string): string {
+    if (t.endsWith("?")) {
+        return t.substring(0, t.length - 1);
+    }
+
+    return t
+}
+
+export function getTypeByValue(v: string): string {
+    // return 'dynamic';
+
+    const value = v.trim()
+    if (value.startsWith("\"")) {
+        return "String";
+    }
+
+    if (value.startsWith("true") || value.startsWith("false")) {
+        return "bool";
+    }
+
+    if (value.startsWith("[")) {
+        const arr = value.split(",");
+        if (arr.length == 0) {
+            return "dynamic";
+        }
+        return `List<${getTypeByValue(arr[0].trim().replace("[", "").replace("]", ""))}>`;
+    }
+
+    if (value.match(RegExp('^\\d+\\.\\d+$')) != null) {
+        return "double";
+    }
+
+
+    if (value.match(RegExp('^\\d+$')) != null) {
+        return 'int';
+    }
+
+    return "dynamic";
+}
+
+export function getDefaultValueByType(v: string): string {
+    const valueType = convertNullableTypeToNonNullableType(v.replace("required", "").trim())
+    switch (valueType) {
+        case "int":
+            return "0";
+        case "String":
+            return "''";
+        case "bool":
+            return "false";
+        case "double":
+            return "0.0";
+        case "dynamic":
+            return "null";
+    }
+
+    if (valueType.startsWith("List")) {
+        return "<" + (valueType.substring(5, valueType.length - 1)) + ">[]";
+    }
+
+    if (valueType.startsWith("Map")) {
+        const mapType = valueType.replace("Map", "").trim()
+
+        return convertNullableTypeToNonNullableType(mapType) + "{}"
+    }
+
+    // Object
+    return (valueType) + "()";
+}

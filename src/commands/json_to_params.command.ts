@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as vscode from "vscode";
 import * as changeCase from "change-case";
-import { getTypeByValue } from "./json_to_data_model.command";
+import { getTypeByValue } from "../utils/utils";
 
 export const jsonToParams = async () => {
     if (vscode.window.activeTextEditor == null) {
