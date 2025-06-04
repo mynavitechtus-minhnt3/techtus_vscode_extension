@@ -17,7 +17,7 @@ class ${pascalCaseFeature}Page extends BasePage<${pascalCaseFeature}State,
       const ${pascalCaseFeature}Page({super.key});
   
   @override
-  ScreenViewEvent get screenViewEvent => ScreenViewEvent(screenName: ScreenName.${camelCaseFeature});
+  ScreenViewEvent get screenViewEvent => ScreenViewEvent(screenName: ScreenName.${camelCaseFeature}Page);
       
   @override
   AutoDisposeStateNotifierProvider<${pascalCaseFeature}ViewModel, CommonState<${pascalCaseFeature}State>> get provider =>
