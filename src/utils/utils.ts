@@ -4,23 +4,6 @@ import * as path from "path";
 import * as copyPaste from "copy-paste";
 import { jsonc } from "jsonc";
 
-export const currentFile = () => vscode.window.activeTextEditor!.document.uri;
-export const currentPath = () => currentFile().path;
-export const currentFileName = () =>
-  currentPath().substring(
-    currentPath().lastIndexOf("/") + 1,
-    currentPath().lastIndexOf(".")
-  );
-export const selectedText = () =>
-  vscode.window.activeTextEditor!.document.getText(
-    vscode.window.activeTextEditor!.selection
-  );
-
-export function editSelection(newText: string) {
-  vscode.window.activeTextEditor?.edit((builder) => {
-    builder.replace(vscode.window.activeTextEditor!.selection, newText);
-  });
-}
 
 export function showPrompt(
   title: string,
@@ -200,26 +183,6 @@ export const wrapWith = async (snippet: (widget: string) => string) => {
   await vscode.commands.executeCommand("editor.action.formatDocument");
 };
 
-const childRegExp = new RegExp("[^S\r\n]*child: .*,s*", "ms");
-
-export const convertTo = async (
-  snippet: (widget: string, child: string) => string
-) => {
-  let editor = vscode.window.activeTextEditor;
-  if (!editor) return;
-  const selection = getSelectedText(editor);
-  const rawWidget = editor.document.getText(selection).replace("$", "//$");
-  const match = rawWidget.match(childRegExp);
-  if (!match || !match.length) return;
-  const child = match[0];
-  if (!child) return;
-  const widget = rawWidget.replace(childRegExp, "");
-  editor.insertSnippet(
-    new vscode.SnippetString(snippet(widget, child)),
-    selection
-  );
-  await vscode.commands.executeCommand("editor.action.formatDocument");
-};
 
 export const camelize = (value: string): string =>
   value
@@ -585,22 +548,6 @@ export function getDefaultValueByType(v: string): string {
     return (valueType) + "()";
 }
 
-export const relativize = (filePath: string, importPath: string, pathSep: string) => {
-    const dartSep = '/';
-    const pathSplit = (path: string, sep: string) => path.length === 0 ? [] : path.split(sep);
-    const fileBits = pathSplit(filePath, pathSep);
-    const importBits = pathSplit(importPath, dartSep);
-    let dotdotAmount = 0, startIdx;
-    for (startIdx = 0; startIdx < fileBits.length; startIdx++) {
-        if (fileBits[startIdx] === importBits[startIdx]) {
-            continue;
-        }
-        dotdotAmount = fileBits.length - startIdx;
-        break;
-    }
-    const relativeBits = new Array(dotdotAmount).fill('..').concat(importBits.slice(startIdx));
-    return relativeBits.join(dartSep);
-};
 
 export function genFile(
   folder: string,
