@@ -56,6 +56,12 @@
           "type": "string",
           "description": "The folder path to create data model and mapper",
           "default": "lib/model/api"
+        },
+        "mynavimobiletool.riverpodPageTemplate": {
+          "type": "string",
+          "description": "Template set used when creating a new riverpod page",
+          "enum": ["template1", "template2"],
+          "default": "template1"
         }
       }
     },

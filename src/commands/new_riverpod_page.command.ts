@@ -2,9 +2,7 @@ import * as vscode from "vscode";
 import * as lo from "lodash";
 import * as changeCase from "change-case";
 import * as fs from "fs";
-import { getPageTemplate } from "../templates/riverpod_page.template";
-import { getViewModelTemplate } from "../templates/view_model.template";
-import { getStateTemplate } from "../templates/state.template";
+import { getRiverpodTemplates } from "../templates/riverpodTemplateManager";
 import { showPrompt, writeFile } from "../utils/utils";
 import { fetchPackageInfoFor } from "./auto_fix_imports/convert_to_relative_import";
 import { configResolver } from "./fix_imports.command";
@@ -39,6 +37,7 @@ export const createNewPage = async () => {
     vscode.window.showErrorMessage("Please enter a feature name");
     return;
   }
+  const templates = getRiverpodTemplates(configResolver.riverpodPageTemplate);
   // lib/state_logic/state_notifiers/save_condition/save_condition_notifier.dart
   // lib/ui/pages/save_condition_page.dart
 
@@ -49,17 +48,17 @@ export const createNewPage = async () => {
     genFile(
       `${targetDirectory}/${featureNameSnakeCase}`,
       `${featureNameSnakeCase}_page.dart`,
-      getPageTemplate(featureName!)
+      templates.getPageTemplate(featureName!)
     ),
     genFile(
       viewModelFolderPath,
       `${featureNameSnakeCase}_view_model.dart`,
-      getViewModelTemplate(featureName!)
+      templates.getViewModelTemplate(featureName!)
     ),
     genFile(
       viewModelFolderPath,
       `${featureNameSnakeCase}_state.dart`,
-      getStateTemplate(featureName!)
+      templates.getStateTemplate(featureName!)
     ),
   ]);
 
