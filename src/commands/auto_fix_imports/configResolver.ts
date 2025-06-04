@@ -1,73 +1,34 @@
 import * as vscode from 'vscode';
 
 export class ConfigResolver {
-    private _excludeFilesWhenFixImport: Array<string>;
-    private _excludeFilesWhenAutoExport: Array<string>;
-    private _packages: Array<string>;
-    private _fixOnSave: boolean;
-    private _autoExportOnSave: boolean;
-    private _autoExportBarrier: string;
-    private _uiFolderPath: string;
-    private _dataModelPath: string;
-    private _entityPath: string;
-    private _riverpodPageTemplate: string;
-    appName: string;
+    public excludeFilesWhenFixImport: Array<string>;
+    public excludeFilesWhenAutoExport: Array<string>;
+    public packages: Array<string>;
+    public fixOnSave: boolean;
+    public autoExportOnSave: boolean;
+    public autoExportBarrier: string;
+    public uiFolderPath: string;
+    public dataModelPath: string;
+    public entityPath: string;
+    public riverpodPageTemplate: string;
+    public appName: string;
 
     constructor() {
         const config = vscode.workspace.getConfiguration(
             'mynavimobiletool',
         ) as vscode.WorkspaceConfiguration;
 
-        this._excludeFilesWhenFixImport = config.get('excludeFilesWhenFixImport') || [];
-        this._excludeFilesWhenAutoExport = config.get('excludeFilesWhenAutoExport') || [];
-        this._packages = config.get('packages') || [];
-        this._fixOnSave = !!config.get('fixImportsOnSave');
-        this._autoExportOnSave = !!config.get('autoExportOnSave');
-        this._autoExportBarrier = config.get('autoExportBarrier') || '';
-        this._uiFolderPath = config.get('uiFolderPath') || '';
-        this._dataModelPath = config.get('dataModelPath') || '';
-        this._entityPath = config.get('entityPath') || '';
+        this.excludeFilesWhenFixImport = config.get('excludeFilesWhenFixImport') || [];
+        this.excludeFilesWhenAutoExport = config.get('excludeFilesWhenAutoExport') || [];
+        this.packages = config.get('packages') || [];
+        this.fixOnSave = !!config.get('fixImportsOnSave');
+        this.autoExportOnSave = !!config.get('autoExportOnSave');
+        this.autoExportBarrier = config.get('autoExportBarrier') || '';
+        this.uiFolderPath = config.get('uiFolderPath') || '';
+        this.dataModelPath = config.get('dataModelPath') || '';
+        this.entityPath = config.get('entityPath') || '';
         this.appName = config.get('appName') || '';
-        this._riverpodPageTemplate = config.get('riverpodPageTemplate') || 'template1';
+        this.riverpodPageTemplate = config.get('riverpodPageTemplate') || 'template1';
     }
 
-    public get excludeFilesWhenFixImport() : Array<string> {
-        return this._excludeFilesWhenFixImport;
-    }
-
-    public get excludeFilesWhenAutoExport() : Array<string> {
-        return this._excludeFilesWhenAutoExport;
-    }
-
-    public get fixOnSave() : boolean {
-        return this._fixOnSave;
-    }
-
-    public get packages() : Array<string> {
-        return this._packages;
-    }
-
-    public get autoExportOnSave(): boolean {
-        return this._autoExportOnSave;
-    }
-
-    public get autoExportBarrier(): string {
-        return this._autoExportBarrier;
-    }
-
-    public get uiFolderPath(): string {
-        return this._uiFolderPath;
-    }
-
-    public get dataModelPath(): string {
-        return this._dataModelPath;
-    }
-
-    public get entityPath(): string {
-        return this._entityPath;
-    }
-
-    public get riverpodPageTemplate(): string {
-        return this._riverpodPageTemplate;
-    }
 }

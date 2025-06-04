@@ -1,6 +1,14 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
+import { LionizationPickItem } from "./lionizationPickItem";
+import { PlaceholderTypeItem } from "./placeholderTypeItem";
+import { StringEscapeSequence } from "./stringEscapeSequence";
+import { Placeholder } from "./placeholder";
+
+export { LionizationPickItem } from "./lionizationPickItem";
+export { PlaceholderTypeItem } from "./placeholderTypeItem";
+export { Placeholder } from "./placeholder";
 
 export const currentFile = () => vscode.window.activeTextEditor!.document.uri;
 export const currentPath = () => currentFile().path;
@@ -89,9 +97,6 @@ export async function showInputBox(
   }
 }
 
-export class LionizationPickItem implements vscode.QuickPickItem {
-  constructor(readonly label: string) {}
-}
 
 export async function showQuickPick(
   title: string,
@@ -372,9 +377,6 @@ export function getPlaceholderType(placeholderTypeValue: string) {
   )[0] as PlaceholderType;
 }
 
-export class PlaceholderTypeItem implements vscode.QuickPickItem {
-  constructor(readonly label: string) {}
-}
 
 export async function showPlaceholderQuickPick(
   variable: string
@@ -435,19 +437,6 @@ export const fetchPackageInfoFor = async (
   };
 };
 
-class StringEscapeSequence {
-  private readonly unescapedStringRegex: RegExp;
-
-  constructor(readonly start: string) {
-    this.unescapedStringRegex = new RegExp(
-      `^${start}([\\s\\S]*?)${start.replace("r", "")}$`,
-      "iu"
-    );
-  }
-
-  getUnescapedString = (input: string): string =>
-    (input.match(this.unescapedStringRegex) ?? [])[1].replace(/\\n/gu, "\n");
-}
 
 export const escapeSequences = [
   'r"""',
@@ -478,41 +467,6 @@ export const resolvePath = (inputPath: string): string =>
       .filter((segment) => segment !== PARENT_DIRECTORY)
   );
 
-export class Placeholder {
-  public format?: string;
-
-  public symbol?: string;
-
-  public decimalDigits?: number;
-
-  public customPattern?: string;
-
-  constructor(
-    readonly name: string,
-    readonly value: string,
-    readonly type: PlaceholderType
-  ) {}
-
-  addFormat(value: string): this {
-    this.format = value;
-    return this;
-  }
-
-  addSymbol(value: string): this {
-    this.symbol = value;
-    return this;
-  }
-
-  addDecimalDigits(value: number): this {
-    this.decimalDigits = value;
-    return this;
-  }
-
-  addCustomPattern(format: string): this {
-    this.customPattern = format;
-    return this;
-  }
-}
 
 export function convertNullableTypeToNonNullableType(t: string): string {
     if (t.endsWith("?")) {

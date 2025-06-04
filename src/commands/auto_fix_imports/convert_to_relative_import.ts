@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as vscode from 'vscode';
 import { EditorAccess, VSCodeEditorAccess } from "./editor_access";
-import { fetchPackageInfoFor } from "../../utils/utils";
+import { fetchPackageInfoFor, PackageInfo } from "../../utils/utils";
 
 const relativize = (filePath: string, importPath: string, pathSep: string) => {
     const dartSep = '/';
