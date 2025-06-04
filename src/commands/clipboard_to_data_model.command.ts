@@ -11,8 +11,6 @@ import { ModelGenerator } from "./clipboard_to_data_model/model-generator";
 import { ClassDefinition } from "./clipboard_to_data_model/syntax";
 import { fetchPackageInfoFor, writeFile } from "../utils/utils";
 import { configResolver } from "./fix_imports.command";
-import { getDataMapperTemplate } from "../templates/data-mapper.template";
-import { getEntityTemplate } from "../templates/entity.template";
 import { autoExport } from "./auto_export.command";
 
 export const transformFromClipboardToDataModel = async () => {

@@ -60,7 +60,10 @@ export function openFile(path: string) {
   return vscode.commands.executeCommand("vscode.open", vscode.Uri.file(path));
 }
 
-export async function showInputBox(title: string, value: string): Promise<string> {
+export async function showInputBox(
+  title: string,
+  value: string
+): Promise<string> {
   const disposables: vscode.Disposable[] = [];
   try {
     return await new Promise<string>((resolve) => {
@@ -75,7 +78,7 @@ export async function showInputBox(title: string, value: string): Promise<string
           inputBox.enabled = true;
           inputBox.busy = false;
           inputBox.hide();
-        }),
+        })
       );
       inputBox.show();
     });
@@ -92,7 +95,7 @@ export class LionizationPickItem implements vscode.QuickPickItem {
 
 export async function showQuickPick(
   title: string,
-  items: LionizationPickItem[],
+  items: LionizationPickItem[]
 ): Promise<string> {
   const disposables: vscode.Disposable[] = [];
   try {
@@ -109,7 +112,7 @@ export async function showQuickPick(
           quickPick.enabled = true;
           quickPick.busy = false;
           quickPick.hide();
-        }),
+        })
       );
       quickPick.show();
     });
@@ -120,10 +123,12 @@ export async function showQuickPick(
   }
 }
 
-export const getSelectedText = (editor: vscode.TextEditor): vscode.Selection => {
+export const getSelectedText = (
+  editor: vscode.TextEditor
+): vscode.Selection => {
   const emptySelection = new vscode.Selection(
     editor.document.positionAt(0),
-    editor.document.positionAt(0),
+    editor.document.positionAt(0)
   );
   const language = editor.document.languageId;
   if (language != "dart") return emptySelection;
@@ -132,15 +137,18 @@ export const getSelectedText = (editor: vscode.TextEditor): vscode.Selection => 
   const lineText = line.text;
   const openBracketIndex = line.text.indexOf(
     "(",
-    editor.selection.anchor.character,
+    editor.selection.anchor.character
   );
 
   let widgetStartIndex =
-    openBracketIndex > 1 ? openBracketIndex - 1 : editor.selection.anchor.character;
+    openBracketIndex > 1
+      ? openBracketIndex - 1
+      : editor.selection.anchor.character;
   for (widgetStartIndex; widgetStartIndex > 0; widgetStartIndex--) {
     const currentChar = lineText.charAt(widgetStartIndex);
     const isBeginningOfWidget =
-      currentChar === "(" || (currentChar === " " && lineText.charAt(widgetStartIndex - 1) !== ",");
+      currentChar === "(" ||
+      (currentChar === " " && lineText.charAt(widgetStartIndex - 1) !== ",");
     if (isBeginningOfWidget) break;
   }
   widgetStartIndex++;
@@ -157,7 +165,7 @@ export const getSelectedText = (editor: vscode.TextEditor): vscode.Selection => 
 
     return new vscode.Selection(
       new vscode.Position(line.lineNumber, widgetStartIndex),
-      new vscode.Position(line.lineNumber, endIndex),
+      new vscode.Position(line.lineNumber, endIndex)
     );
   }
 
@@ -172,7 +180,7 @@ export const getSelectedText = (editor: vscode.TextEditor): vscode.Selection => 
       if (bracketCount === 0) {
         return new vscode.Selection(
           new vscode.Position(line.lineNumber, widgetStartIndex),
-          new vscode.Position(l, c + 1),
+          new vscode.Position(l, c + 1)
         );
       }
     }
@@ -192,7 +200,9 @@ export const wrapWith = async (snippet: (widget: string) => string) => {
 
 const childRegExp = new RegExp("[^S\r\n]*child: .*,s*", "ms");
 
-export const convertTo = async (snippet: (widget: string, child: string) => string) => {
+export const convertTo = async (
+  snippet: (widget: string, child: string) => string
+) => {
   let editor = vscode.window.activeTextEditor;
   if (!editor) return;
   const selection = getSelectedText(editor);
@@ -202,98 +212,113 @@ export const convertTo = async (snippet: (widget: string, child: string) => stri
   const child = match[0];
   if (!child) return;
   const widget = rawWidget.replace(childRegExp, "");
-  editor.insertSnippet(new vscode.SnippetString(snippet(widget, child)), selection);
+  editor.insertSnippet(
+    new vscode.SnippetString(snippet(widget, child)),
+    selection
+  );
   await vscode.commands.executeCommand("editor.action.formatDocument");
 };
 
 export const camelize = (value: string): string =>
   value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036F]/u, '')
+    .normalize("NFD")
+    .replace(/[\u0300-\u036F]/u, "")
     .split(/[^a-zA-Z0-9]/u)
-    .map((element, index) => (index === 0 ? element.toLowerCase() : element.charAt(0).toUpperCase() + element.substring(1).toLowerCase()))
-    .join('');
+    .map((element, index) =>
+      index === 0
+        ? element.toLowerCase()
+        : element.charAt(0).toUpperCase() + element.substring(1).toLowerCase()
+    )
+    .join("");
 
 export const validNumberFormats = [
-  'compact',
-  'compactCurrency',
-  'compactSimpleCurrency',
-  'compactLong',
-  'currency',
-  'decimalPattern',
-  'decimalPercentPattern',
-  'percentPattern',
-  'scientificPattern',
-  'simpleCurrency',
+  "compact",
+  "compactCurrency",
+  "compactSimpleCurrency",
+  "compactLong",
+  "currency",
+  "decimalPattern",
+  "decimalPercentPattern",
+  "percentPattern",
+  "scientificPattern",
+  "simpleCurrency",
 ];
 
-export const numberFormatsWithSymbol = ['compactCurrency', 'currency'];
+export const numberFormatsWithSymbol = ["compactCurrency", "currency"];
 
 export function includeInSymbol(value: string) {
   return numberFormatsWithSymbol.includes(value);
 }
 
-export const numberFormatsWithDecimalDigits = ['compactCurrency', 'compactSimpleCurrency', 'currency', 'decimalPercentPattern', 'simpleCurrency'];
+export const numberFormatsWithDecimalDigits = [
+  "compactCurrency",
+  "compactSimpleCurrency",
+  "currency",
+  "decimalPercentPattern",
+  "simpleCurrency",
+];
 
 export function includeInDecimalDigits(value: string) {
   return numberFormatsWithDecimalDigits.includes(value);
 }
 
-export const numberFormatsWithCustomPattern = ['currency'];
+export const numberFormatsWithCustomPattern = ["currency"];
 
 export function includeInCustomPattern(value: string) {
   return numberFormatsWithCustomPattern.includes(value);
 }
 
 export const validDateFormats = [
-  'd',
-  'E',
-  'EEEE',
-  'LLL',
-  'LLLL',
-  'M',
-  'Md',
-  'MEd',
-  'MMM',
-  'MMMd',
-  'MMMEd',
-  'MMMM',
-  'MMMMd',
-  'MMMMEEEEd',
-  'QQQ',
-  'QQQQ',
-  'y',
-  'yM',
-  'yMd',
-  'yMEd',
-  'yMMM',
-  'yMMMd',
-  'yMMMEd',
-  'yMMMM',
-  'yMMMMd',
-  'yMMMMEEEEd',
-  'yQQQ',
-  'yQQQQ',
-  'H',
-  'Hm',
-  'Hms',
-  'j',
-  'jm',
-  'jms',
-  'jmv',
-  'jmz',
-  'jv',
-  'jz',
-  'm',
-  'ms',
-  's',
+  "d",
+  "E",
+  "EEEE",
+  "LLL",
+  "LLLL",
+  "M",
+  "Md",
+  "MEd",
+  "MMM",
+  "MMMd",
+  "MMMEd",
+  "MMMM",
+  "MMMMd",
+  "MMMMEEEEd",
+  "QQQ",
+  "QQQQ",
+  "y",
+  "yM",
+  "yMd",
+  "yMEd",
+  "yMMM",
+  "yMMMd",
+  "yMMMEd",
+  "yMMMM",
+  "yMMMMd",
+  "yMMMMEEEEd",
+  "yQQQ",
+  "yQQQQ",
+  "H",
+  "Hm",
+  "Hms",
+  "j",
+  "jm",
+  "jms",
+  "jmv",
+  "jmz",
+  "jv",
+  "jz",
+  "m",
+  "ms",
+  "s",
 ];
 
 export function notInclude(value: string) {
   return !validDateFormats.includes(value);
 }
 
-export async function showDateFormatQuickPick(variable: string): Promise<string> {
+export async function showDateFormatQuickPick(
+  variable: string
+): Promise<string> {
   const disposables: vscode.Disposable[] = [];
   try {
     return await new Promise<string>((resolve) => {
@@ -302,9 +327,11 @@ export async function showDateFormatQuickPick(variable: string): Promise<string>
       quickPick.items = validDateFormats.map((s) => new LionizationPickItem(s));
       quickPick.onDidChangeValue(() => {
         if (notInclude(quickPick.value))
-          quickPick.items = [quickPick.value, ...validDateFormats].map((label) => ({
-            label,
-          }));
+          quickPick.items = [quickPick.value, ...validDateFormats].map(
+            (label) => ({
+              label,
+            })
+          );
       });
       disposables.push(
         quickPick.onDidChangeSelection((selected) => {
@@ -315,7 +342,7 @@ export async function showDateFormatQuickPick(variable: string): Promise<string>
           quickPick.enabled = true;
           quickPick.busy = false;
           quickPick.hide();
-        }),
+        })
       );
       quickPick.show();
     });
@@ -327,12 +354,12 @@ export async function showDateFormatQuickPick(variable: string): Promise<string>
 }
 
 export enum PlaceholderType {
-  String = 'String',
-  int = 'int',
-  num = 'num',
-  double = 'double',
-  DateTime = 'DateTime',
-  plural = 'plural',
+  String = "String",
+  int = "int",
+  num = "num",
+  double = "double",
+  DateTime = "DateTime",
+  plural = "plural",
 }
 
 export function getPlaceholderTypes() {
@@ -340,17 +367,21 @@ export function getPlaceholderTypes() {
 }
 
 export function getPlaceholderType(placeholderTypeValue: string) {
-  return Object.values(PlaceholderType).filter((p) => p.toString() === placeholderTypeValue)[0] as PlaceholderType;
+  return Object.values(PlaceholderType).filter(
+    (p) => p.toString() === placeholderTypeValue
+  )[0] as PlaceholderType;
 }
 
 export class PlaceholderTypeItem implements vscode.QuickPickItem {
   constructor(readonly label: string) {}
 }
 
-export async function showPlaceholderQuickPick(variable: string): Promise<PlaceholderType> {
+export async function showPlaceholderQuickPick(
+  variable: string
+): Promise<PlaceholderType> {
   const placeholderTypeValue = await showQuickPick(
     `Choose the type for the variable ${variable}`,
-    getPlaceholderTypes().map((p) => new PlaceholderTypeItem(p)),
+    getPlaceholderTypes().map((p) => new PlaceholderTypeItem(p))
   );
   return getPlaceholderType(placeholderTypeValue);
 }
@@ -361,28 +392,32 @@ export interface PackageInfo {
 }
 
 export const findPubspec = async (activeFileUri: vscode.Uri) => {
-  const allPubspecUris = await vscode.workspace.findFiles('**/pubspec.yaml');
+  const allPubspecUris = await vscode.workspace.findFiles("**/pubspec.yaml");
   return allPubspecUris.filter((pubspecUri) => {
     const packageRootUri =
-      (pubspecUri.with({ path: path.dirname(pubspecUri.path) }) as unknown as vscode.Uri) + '/';
+      (pubspecUri.with({
+        path: path.dirname(pubspecUri.path),
+      }) as unknown as vscode.Uri) + "/";
 
     return activeFileUri.toString().startsWith(packageRootUri.toString());
   });
 };
 
 export const fetchPackageInfoFor = async (
-  activeDocumentUri: vscode.Uri,
+  activeDocumentUri: vscode.Uri
 ): Promise<PackageInfo | null> => {
   const pubspecUris = await findPubspec(activeDocumentUri);
-  const pubspec: vscode.TextDocument = await vscode.workspace.openTextDocument(pubspecUris[0]);
+  const pubspec: vscode.TextDocument = await vscode.workspace.openTextDocument(
+    pubspecUris[0]
+  );
   const projectRoot = path.dirname(pubspec.fileName);
   const possibleNameLines = pubspec
     .getText()
-    .split('\n')
+    .split("\n")
     .filter((line: string) => line.match(/^name:/));
   if (possibleNameLines.length !== 1) {
     vscode.window.showErrorMessage(
-      `Expected to find a single line starting with 'name:' on pubspec.yaml file, ${possibleNameLines.length} found.`,
+      `Expected to find a single line starting with 'name:' on pubspec.yaml file, ${possibleNameLines.length} found.`
     );
     return null;
   }
@@ -390,7 +425,7 @@ export const fetchPackageInfoFor = async (
   const packageNameMatch = /^name:\s*(.*)$/gm.exec(nameLine);
   if (!packageNameMatch) {
     vscode.window.showErrorMessage(
-      `Expected line 'name:' on pubspec.yaml to match regex, but it didn't (line: ${nameLine}).`,
+      `Expected line 'name:' on pubspec.yaml to match regex, but it didn't (line: ${nameLine}).`
     );
     return null;
   }
@@ -399,3 +434,82 @@ export const fetchPackageInfoFor = async (
     projectName: packageNameMatch[1].trim(),
   };
 };
+
+class StringEscapeSequence {
+  private readonly unescapedStringRegex: RegExp;
+
+  constructor(readonly start: string) {
+    this.unescapedStringRegex = new RegExp(
+      `^${start}([\\s\\S]*?)${start.replace("r", "")}$`,
+      "iu"
+    );
+  }
+
+  getUnescapedString = (input: string): string =>
+    (input.match(this.unescapedStringRegex) ?? [])[1].replace(/\\n/gu, "\n");
+}
+
+export const escapeSequences = [
+  'r"""',
+  "r'''",
+  'r"',
+  "r'",
+  '"""',
+  "'''",
+  '"',
+  "'",
+].map((start) => new StringEscapeSequence(start));
+
+export const getUnescapedString = (input: string): string =>
+  escapeSequences
+    .find((e) => input.startsWith(e.start))
+    ?.getUnescapedString(input) ?? "";
+
+export const extractInterpolatedVariables = (input: string): string[] =>
+  Array.from(input.matchAll(/\$\{?([^\s{}]+)\}?/gu), (match) => match[1]);
+
+const PARENT_DIRECTORY = "..";
+
+export const resolvePath = (inputPath: string): string =>
+  path.join(
+    ...path
+      .normalize(inputPath)
+      .split(path.sep)
+      .filter((segment) => segment !== PARENT_DIRECTORY)
+  );
+
+export class Placeholder {
+  public format?: string;
+
+  public symbol?: string;
+
+  public decimalDigits?: number;
+
+  public customPattern?: string;
+
+  constructor(
+    readonly name: string,
+    readonly value: string,
+    readonly type: PlaceholderType
+  ) {}
+
+  addFormat(value: string): this {
+    this.format = value;
+    return this;
+  }
+
+  addSymbol(value: string): this {
+    this.symbol = value;
+    return this;
+  }
+
+  addDecimalDigits(value: number): this {
+    this.decimalDigits = value;
+    return this;
+  }
+
+  addCustomPattern(format: string): this {
+    this.customPattern = format;
+    return this;
+  }
+}
