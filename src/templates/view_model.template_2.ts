@@ -5,7 +5,6 @@ export function getViewModelTemplate(feature: string): string {
   const snakeCaseFeature = changeCase.snakeCase(feature.toLowerCase());
   const camelCaseFeature = changeCase.camelCase(feature.toLowerCase());
   return `import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:shared/index.dart';
 
 import '../../../../index.dart';
 

@@ -37,38 +37,38 @@ const DART_MODE = { language: "dart", scheme: "file" };
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(
-      "nalsmobiletool.createNewPage",
+      "mynavimobiletool.createNewPage",
       createNewPage
     ),
-    // vscode.commands.registerCommand("nalsmobiletool.transformParams", transformParams),
-    // vscode.commands.registerCommand('nalsmobiletool.fixImport', fixImport),
-    // vscode.commands.registerCommand('nalsmobiletool.fixAllImports', fixAllImports),
+    // vscode.commands.registerCommand("mynavimobiletool.transformParams", transformParams),
+    // vscode.commands.registerCommand('mynavimobiletool.fixImport', fixImport),
+    // vscode.commands.registerCommand('mynavimobiletool.fixAllImports', fixAllImports),
     vscode.commands.registerCommand(
-      "nalsmobiletool.jsonToDataModel",
+      "mynavimobiletool.jsonToDataModel",
       jsonToDataModel
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.clipboardToDataModel",
+      "mynavimobiletool.clipboardToDataModel",
       transformFromClipboardToDataModel
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.jsonToParams",
+      "mynavimobiletool.jsonToParams",
       jsonToParams
     ),
-    vscode.commands.registerCommand("nalsmobiletool.autoExport", autoExport),
+    vscode.commands.registerCommand("mynavimobiletool.autoExport", autoExport),
     vscode.commands.registerCommand(
-      "nalsmobiletool.createUTFile",
+      "mynavimobiletool.createUTFile",
       createUTFile
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.extractApiUrl",
+      "mynavimobiletool.extractApiUrl",
       extractApiUrl
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.translateAndExtractValueToArbFiles",
+      "mynavimobiletool.translateAndExtractValueToArbFiles",
       translateAndExtractValueToArbFiles
     ),
-    vscode.commands.registerCommand("nalsmobiletool.sortArbFiles", sortAndSave),
+    vscode.commands.registerCommand("mynavimobiletool.sortArbFiles", sortAndSave),
     configChanges,
     documentSave,
     vscode.languages.registerCodeActionsProvider(
@@ -80,51 +80,51 @@ export function activate(context: vscode.ExtensionContext) {
       new ConsumerCodeActionProvider()
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.wrapWithConsumer",
+      "mynavimobiletool.wrapWithConsumer",
       wrapWithConsumer
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.wrapWithExpanded",
+      "mynavimobiletool.wrapWithExpanded",
       wrapWithExpanded
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.wrapWithFlexible",
+      "mynavimobiletool.wrapWithFlexible",
       wrapWithFlexible
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.wrapWithInkWell",
+      "mynavimobiletool.wrapWithInkWell",
       wrapWithInkWell
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.wrapWithGestureDetector",
+      "mynavimobiletool.wrapWithGestureDetector",
       wrapWithGestureDetector
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.wrapWithStack",
+      "mynavimobiletool.wrapWithStack",
       wrapWithStack
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.wrapWithSingleChildScrollView",
+      "mynavimobiletool.wrapWithSingleChildScrollView",
       wrapWithSingleChildScrollView
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.wrapWithCommonContainer",
+      "mynavimobiletool.wrapWithCommonContainer",
       wrapWithCommonContainer
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.wrapWithHorizontalPadding",
+      "mynavimobiletool.wrapWithHorizontalPadding",
       wrapWithHorizontalPadding
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.wrapWithVerticalPadding",
+      "mynavimobiletool.wrapWithVerticalPadding",
       wrapWithVerticalPadding
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.convertBasePageToBaseStatefulPage",
+      "mynavimobiletool.convertBasePageToBaseStatefulPage",
       convertBasePageToBaseStatefulPage
     ),
     vscode.commands.registerCommand(
-      "nalsmobiletool.convertBaseStatefulPageToBasePage",
+      "mynavimobiletool.convertBaseStatefulPageToBasePage",
       convertBaseStatefulPageToBasePage
     )
   );

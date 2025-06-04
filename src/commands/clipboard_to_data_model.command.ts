@@ -30,7 +30,15 @@ export const transformFromClipboardToDataModel = async () => {
         return;
     }
     
-  const targetDirectory = `${packageInfo.projectRoot}/${configResolver.dataModelPath}`;
+  var targetDirectory = `${packageInfo.projectRoot}/${configResolver.dataModelPath}`;
+  if (!fs.existsSync(targetDirectory)) {
+      targetDirectory = `${
+        packageInfo.projectRoot
+      }/lib/src/${configResolver.dataModelPath.substring(
+        "lib/".length,
+        configResolver.dataModelPath.length
+      )}`;
+    }
   const entityDirectory = `${packageInfo.projectRoot}/${configResolver.entityPath}`;
     const className = await promptForBaseClassName();
 
@@ -56,7 +64,7 @@ export const transformFromClipboardToDataModel = async () => {
     // }
 
     const json: string = await getClipboardText().then(validateJSON).catch(handleError);
-    window.showInformationMessage(`Converting: ${json}`);
+    window.showInformationMessage(`${targetDirectory}, Converting: ${json}`);
     // const genMapper = await promptForMapperGen();
     // const genEntity = await promptForEntityGen();
     const model = new ClassNameModel(className!);

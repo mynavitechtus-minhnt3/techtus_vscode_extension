@@ -77,12 +77,12 @@ const findPubspec = async (activeFileUri: vscode.Uri) => {
 
 const fetchPackageInfoFor = async (activeDocumentUri: vscode.Uri): Promise<PackageInfo | null> => {
     const pubspecUris = await findPubspec(activeDocumentUri);
-    if (pubspecUris.length !== 1) {
-        vscode.window.showErrorMessage(
-            `Expected to find a single pubspec.yaml file above ${activeDocumentUri}, ${pubspecUris.length} found.`,
-        );
-        return null;
-    }
+    // if (pubspecUris.length !== 1) {
+    //     vscode.window.showErrorMessage(
+    //         `Expected to find a single pubspec.yaml file above ${activeDocumentUri}, ${pubspecUris.length} found.`,
+    //     );
+    //     return null;
+    // }
 
     const pubspec: vscode.TextDocument = await vscode.workspace.openTextDocument(pubspecUris[0]);
     const projectRoot = path.dirname(pubspec.fileName);

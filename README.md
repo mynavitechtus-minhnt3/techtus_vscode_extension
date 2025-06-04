@@ -1,4 +1,4 @@
-# nalsmobiletool
+# mynavimobiletool
 
 ## Package tools
 

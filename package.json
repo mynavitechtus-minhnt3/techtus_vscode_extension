@@ -1,9 +1,9 @@
 {
-  "name": "nalsmobiletool",
-  "displayName": "NALSMobileTool",
-  "description": "Super power tool for NALS Mobile",
-  "icon": "images/nals.png",
-  "version": "2.2.0",
+  "name": "mynavimobiletool",
+  "displayName": "MynaviMobileTool",
+  "description": "Super power tool for Mynavi Mobile Team",
+  "icon": "images/mynavi.png",
+  "version": "2.2.2",
   "engines": {
     "vscode": "^1.75.0"
   },
@@ -17,9 +17,9 @@
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": {
-      "title": "NALSMobileTool settings",
+      "title": "MynaviMobileTool settings",
       "properties": {
-        "nalsMobileBrain.excludeFilesWhenAutoExport": {
+        "mynavimobiletool.excludeFilesWhenAutoExport": {
           "type": "array",
           "items": {
             "type": "string"
@@ -32,27 +32,27 @@
             "mapper.dart"
           ]
         },
-        "nalsMobileBrain.autoExportOnSave": {
+        "mynavimobiletool.autoExportOnSave": {
           "type": "boolean",
           "description": "Auto export on file save",
           "default": false
         },
-        "nalsMobileBrain.autoExportBarrier": {
+        "mynavimobiletool.autoExportBarrier": {
           "type": "string",
           "description": "Any code above the barrier will not be replaced. If it is empty, all codes will be replaced",
           "default": ""
         },
-        "nalsMobileBrain.appName": {
+        "mynavimobiletool.appName": {
           "type": "string",
           "description": "App name declared in pubspec.yaml",
           "default": "nalsflutter"
         },
-        "nalsMobileBrain.uiFolderPath": {
+        "mynavimobiletool.uiFolderPath": {
           "type": "string",
           "description": "The folder path to create page and viewmodel",
           "default": "lib/ui/page"
         },
-        "nalsMobileBrain.dataModelPath": {
+        "mynavimobiletool.dataModelPath": {
           "type": "string",
           "description": "The folder path to create data model and mapper",
           "default": "lib/model/api"
@@ -61,39 +61,39 @@
     },
     "commands": [
       {
-        "command": "nalsmobiletool.createNewPage",
-        "title": "nals:Create new Page"
+        "command": "mynavimobiletool.createNewPage",
+        "title": "mynavi:Create new Page"
       },
       {
-        "command": "nalsmobiletool.jsonToDataModel",
-        "title": "nals:[API] Json to Data Model"
+        "command": "mynavimobiletool.jsonToDataModel",
+        "title": "mynavi:[API] Json to Data Model"
       },
       {
-        "command": "nalsmobiletool.clipboardToDataModel",
-        "title": "nals:[API] Clipboard to Data Model"
+        "command": "mynavimobiletool.clipboardToDataModel",
+        "title": "mynavi:[API] Clipboard to Data Model"
       },
       {
-        "command": "nalsmobiletool.jsonToParams",
-        "title": "nals:[API] Json to Params"
+        "command": "mynavimobiletool.jsonToParams",
+        "title": "mynavi:[API] Json to Params"
       },
       {
-        "command": "nalsmobiletool.autoExport",
-        "title": "nals:Auto export"
+        "command": "mynavimobiletool.autoExport",
+        "title": "mynavi:Auto export"
       },
       {
-        "command": "nalsmobiletool.createUTFile",
-        "title": "nals:Create test file"
+        "command": "mynavimobiletool.createUTFile",
+        "title": "mynavi:Create test file"
       },
       {
-        "command": "nalsmobiletool.extractApiUrl",
-        "title": "nals:[API] Extract API URL"
+        "command": "mynavimobiletool.extractApiUrl",
+        "title": "mynavi:[API] Extract API URL"
       },
       {
-        "command": "nalsmobiletool.translateAndExtractValueToArbFiles",
-        "title": "nals: Translate and extract value to arb files"
+        "command": "mynavimobiletool.translateAndExtractValueToArbFiles",
+        "title": "mynavi: Translate and extract value to arb files"
       },{
-        "command": "nalsmobiletool.sortArbFiles",
-        "title": "nals: Sort arb files"
+        "command": "mynavimobiletool.sortArbFiles",
+        "title": "mynavi: Sort arb files"
       }
     ],
     "menus": {

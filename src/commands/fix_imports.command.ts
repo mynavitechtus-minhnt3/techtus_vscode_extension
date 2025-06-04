@@ -8,7 +8,7 @@ import { VSCodeEditorAccess } from "./auto_fix_imports/editor_access";
 export let configResolver = new ConfigResolver();
 
 export const configChanges = vscode.workspace.onDidChangeConfiguration((e) => {
-    if (e.affectsConfiguration('nalsMobileBrain')) {
+    if (e.affectsConfiguration('mynavimobiletool')) {
         configResolver = new ConfigResolver();
     }
 });

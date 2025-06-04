@@ -12,19 +12,27 @@ import { autoExport } from "./auto_export.command";
 
 export const createNewPage = async () => {
   const rawEditor = vscode.window.activeTextEditor;
-    if (!rawEditor) {
-        vscode.window.showErrorMessage(`text editor is null`);
-        return;
-    }
+  if (!rawEditor) {
+    vscode.window.showErrorMessage(`text editor is null`);
+    return;
+  }
   const packageInfo = await fetchPackageInfoFor(rawEditor.document.uri);
-    if (!packageInfo) {
-        vscode.window.showErrorMessage(
-            'Failed to initialize extension. Is this a valid Dart/Flutter project?',
-        );
-        return;
-    }
-    
-  const targetDirectory = `${packageInfo.projectRoot}/${configResolver.uiFolderPath}`;
+  if (!packageInfo) {
+    vscode.window.showErrorMessage(
+      "Failed to initialize extension. Is this a valid Dart/Flutter project?"
+    );
+    return;
+  }
+
+  var targetDirectory = `${packageInfo.projectRoot}/${configResolver.uiFolderPath}`;
+  if (!fs.existsSync(targetDirectory)) {
+    targetDirectory = `${
+      packageInfo.projectRoot
+    }/lib/src/${configResolver.uiFolderPath.substring(
+      "lib/".length,
+      configResolver.uiFolderPath.length
+    )}`;
+  }
   let featureName = await showPrompt("Enter your feature", "register_user");
 
   if (lo.isNil(featureName)) {
@@ -33,14 +41,26 @@ export const createNewPage = async () => {
   }
   // lib/state_logic/state_notifiers/save_condition/save_condition_notifier.dart
   // lib/ui/pages/save_condition_page.dart
-  
+
   let featureNameSnakeCase = changeCase.snakeCase(featureName!);
   let viewModelFolderPath = `${targetDirectory}/${featureNameSnakeCase}/view_model`;
 
   await Promise.all([
-    genFile(`${targetDirectory}/${featureNameSnakeCase}`, `${featureNameSnakeCase}_page.dart`, getPageTemplate(featureName!)),
-    genFile(viewModelFolderPath, `${featureNameSnakeCase}_view_model.dart`, getViewModelTemplate(featureName!)),
-    genFile(viewModelFolderPath, `${featureNameSnakeCase}_state.dart`, getStateTemplate(featureName!)),
+    genFile(
+      `${targetDirectory}/${featureNameSnakeCase}`,
+      `${featureNameSnakeCase}_page.dart`,
+      getPageTemplate(featureName!)
+    ),
+    genFile(
+      viewModelFolderPath,
+      `${featureNameSnakeCase}_view_model.dart`,
+      getViewModelTemplate(featureName!)
+    ),
+    genFile(
+      viewModelFolderPath,
+      `${featureNameSnakeCase}_state.dart`,
+      getStateTemplate(featureName!)
+    ),
   ]);
 
   await autoExport();

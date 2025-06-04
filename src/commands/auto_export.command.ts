@@ -41,9 +41,9 @@ export const autoExport = async () => {
 };
 
 export async function writeExport(excludeExt, barrier, libFolder) {
-    const modulePath = `lib`;
+    const modulePath = vscode.workspace.asRelativePath(libFolder);
     const f = await vscode.workspace.findFiles(`${modulePath}/**/**.dart`);
-    const filesUris = await (await vscode.workspace.findFiles(`${modulePath}/**/**.dart`, `${modulePath}/**/**.{${excludeExt}}`)).filter((e) => !RegExp('generated/intl/\\w+\.dart').test(e.toString()));
+    const filesUris = await (await vscode.workspace.findFiles(`${modulePath}/**/**.dart`, `${modulePath}/**/**.{${excludeExt}}`));
     const indexFilePath = `${libFolder}/index.dart`;
     if (filesUris.length === 0) {
         vscode.window.showInformationMessage(`No dart files were found`);

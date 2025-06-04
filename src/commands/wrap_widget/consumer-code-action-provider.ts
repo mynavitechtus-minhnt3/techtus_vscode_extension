@@ -11,43 +11,43 @@ export class ConsumerCodeActionProvider implements CodeActionProvider {
 
     return [
       {
-        command: "nalsmobiletool.wrapWithConsumer",
+        command: "mynavimobiletool.wrapWithConsumer",
         title: "Wrap with Consumer",
       },
       {
-        command: "nalsmobiletool.wrapWithStack",
+        command: "mynavimobiletool.wrapWithStack",
         title: "Wrap with Stack",
       },
       {
-        command: "nalsmobiletool.wrapWithExpanded",
+        command: "mynavimobiletool.wrapWithExpanded",
         title: "Wrap with Expanded",
       },
       {
-        command: "nalsmobiletool.wrapWithFlexible",
+        command: "mynavimobiletool.wrapWithFlexible",
         title: "Wrap with Flexible",
       },
       {
-        command: "nalsmobiletool.wrapWithSingleChildScrollView",
+        command: "mynavimobiletool.wrapWithSingleChildScrollView",
         title: "Wrap with SingleChildScrollView",
       },
       {
-        command: "nalsmobiletool.wrapWithHorizontalPadding",
+        command: "mynavimobiletool.wrapWithHorizontalPadding",
         title: "Wrap with Horizontal Padding",
       },
       {
-        command: "nalsmobiletool.wrapWithVerticalPadding",
+        command: "mynavimobiletool.wrapWithVerticalPadding",
         title: "Wrap with Vertical Padding",
       },
       {
-        command: "nalsmobiletool.wrapWithCommonContainer",
+        command: "mynavimobiletool.wrapWithCommonContainer",
         title: "Wrap with CommonContainer",
       },
       {
-        command: "nalsmobiletool.wrapWithInkWell",
+        command: "mynavimobiletool.wrapWithInkWell",
         title: "Wrap with InkWell",
       },
       {
-        command: "nalsmobiletool.wrapWithGestureDetector",
+        command: "mynavimobiletool.wrapWithGestureDetector",
         title: "Wrap with GestureDetector",
       },
     ].map((c) => {

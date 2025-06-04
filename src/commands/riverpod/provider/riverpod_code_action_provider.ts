@@ -47,7 +47,7 @@ class RiverpodCodeActionProvider implements CodeActionProvider {
     if (/class(.+)extends(.+)BasePage(.*)/.test(selectedLineText)) {
       registerCodeAction(
         "Convert to BaseStatefulPage",
-        "nalsmobiletool.convertBasePageToBaseStatefulPage",
+        "mynavimobiletool.convertBasePageToBaseStatefulPage",
         document,
         range,
         actions
@@ -60,7 +60,7 @@ class RiverpodCodeActionProvider implements CodeActionProvider {
     ) {
       registerCodeAction(
         "Convert to BasePage",
-        "nalsmobiletool.convertBaseStatefulPageToBasePage",
+        "mynavimobiletool.convertBaseStatefulPageToBasePage",
         document,
         range,
         actions

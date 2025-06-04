@@ -14,7 +14,7 @@ export class ConfigResolver {
 
     constructor() {
         const config = vscode.workspace.getConfiguration(
-            'nalsMobileBrain',
+            'mynavimobiletool',
         ) as vscode.WorkspaceConfiguration;
 
         this._excludeFilesWhenFixImport = config.get('excludeFilesWhenFixImport') || [];

@@ -4,7 +4,8 @@ export function getStateTemplate(feature: string): string {
   const pascalCaseFeature = changeCase.pascalCase(feature.toLowerCase());
   const snakeCaseFeature = changeCase.snakeCase(feature.toLowerCase());
   return `import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:shared/index.dart';
+
+import '../../../../index.dart';  
 
 part '${snakeCaseFeature}_state.freezed.dart';
 
