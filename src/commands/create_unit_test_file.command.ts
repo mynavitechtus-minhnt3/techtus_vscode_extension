@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as vscode from "vscode";
 import * as changeCase from "change-case";
-import { openFile } from "../utils/utils";
+import { openFile, readFile, writeFile } from "../utils/utils";
 import { configResolver } from "./fix_imports.command";
 
 export const createUTFile = async () => {
@@ -95,29 +95,6 @@ void main() {
   await vscode.commands.executeCommand("editor.action.formatDocument");
 };
 
-export function readFile(path: string): Promise<string> {
-  return new Promise<string>((resolve, reject) => {
-    fs.readFile(path, "utf8", (err, data) => {
-      if (err) {
-        reject(new Error(`Couldn't read file due to error: ${err}`));
-      } else {
-        resolve(data);
-      }
-    });
-  });
-}
-
-export function writeFile(path: string, data: string) {
-  return new Promise<void>((resolve, reject) => {
-    fs.writeFile(path, data, "utf8", (err) => {
-      if (err) {
-        reject(new Error(`Couldn't write file due to error: ${err}`));
-      } else {
-        resolve();
-      }
-    });
-  });
-}
 
 const createPageWidgetTestFile = async (
   currentFile: vscode.Uri,

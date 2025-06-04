@@ -1,4 +1,4 @@
-import { PlaceholderType } from './placeholderType';
+import { PlaceholderType } from '../utils/utils';
 
 export class Placeholder {
   public format?: string;
