@@ -2,7 +2,7 @@ import * as _ from "lodash";
 import * as vscode from "vscode";
 import * as path from "path";
 import { fetchPackageInfoFor, writeFile, readFile } from "../utils/utils";
-import { configResolver } from "../utils/configResolver";
+import { configResolver } from "../utils/config_resolver";
 
 export const autoExport = async () => {
   let excludeExt = configResolver.excludeFilesWhenAutoExport;

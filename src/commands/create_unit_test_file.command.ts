@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as vscode from "vscode";
 import * as changeCase from "change-case";
 import { openFile, readFile, writeFile } from "../utils/utils";
-import { configResolver } from "../utils/configResolver";
+import { configResolver } from "../utils/config_resolver";
 
 export const createUTFile = async () => {
   const currentFile = vscode.window.activeTextEditor!.document.uri;
@@ -48,25 +48,10 @@ export const createUTFile = async () => {
   const testPath =
     arr[0] + "/test/unit_test/" + arr[1].replace(".dart", "_test.dart");
   const testContent = `import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:${configResolver.appName}/index.dart';
-
-${mocks ?? ""}
 
 void main() {
-    ${propertyDeclaration2 ?? ""}
-    ${propertyDeclaration ?? ""}
-
     setUp(() {
-        ${changeCase.camelCase(
-          currentFileName.endsWith("impl")
-            ? currentFileName.substring(0, currentFileName.length - 4)
-            : currentFileName
-        )} = ${changeCase.pascalCase(currentFileName)}(
-            ${properties?.map((e) => `_mock${e}`).join(",\n") ?? ""}${
-    properties?.length == 0 || properties == null ? "" : ","
-  }
-        );
+        
     });
 
     group('xxx', () {
@@ -157,19 +142,9 @@ const createVMUTFile = async (
   const testPath =
     arr[0] + "/test/unit_test/" + arr[1].replace(".dart", "_test.dart");
   const testContent = `import 'package:flutter_test/flutter_test.dart';
-import 'package:mocktail/mocktail.dart';
-import 'package:${configResolver.appName}/index.dart';
-import 'package:state_notifier_test/state_notifier_test.dart';
-
-import '../../../../../common/base_test.dart';
 
 void main() {
-    ${propertyDeclaration2 ?? ""}
-
     setUp(() {
-        ${changeCase.camelCase(currentFileName)} = ${changeCase.pascalCase(
-    currentFileName
-  )}(ref);
     });
 
     group('xxx', () {
@@ -177,20 +152,6 @@ void main() {
 
         });
     });
-}
-
-CommonState<${stateClassName}> _${changeCase.camelCase(
-    stateClassName
-  )}(${stateClassName} data) => CommonState(data: data);
-
-extension ${stateClassName}Ext on CommonState<${stateClassName}> {
-  CommonState<${stateClassName}> copyWithData({
-  }) {
-    return copyWith(
-      data: data.copyWith(
-      ),
-    );
-  }
 }
 `;
   if (fs.existsSync(testPath) && (await readFile(testPath)).trim() != "") {

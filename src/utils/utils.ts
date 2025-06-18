@@ -3,6 +3,19 @@ import * as fs from "fs";
 import { jsonc } from "jsonc";
 import * as path from "path";
 import * as vscode from "vscode";
+import * as yaml from "yaml";
+import {
+  CommandParameters,
+  EditFilesParameters,
+  KeyValuePair,
+  L10nObject,
+  LionizationPickItem,
+  PackageInfo,
+  Placeholder,
+  PlaceholderType,
+  PlaceholderTypeItem,
+  StringEscapeSequence,
+} from "./classes";
 
 export const currentFile = () => vscode.window.activeTextEditor!.document.uri;
 export const currentPath = () => currentFile().path;
@@ -91,10 +104,6 @@ export async function showInputBox(
       d.dispose();
     });
   }
-}
-
-export class LionizationPickItem implements vscode.QuickPickItem {
-  constructor(readonly label: string) {}
 }
 
 export async function showQuickPick(
@@ -336,15 +345,6 @@ export async function showDateFormatQuickPick(
   }
 }
 
-export enum PlaceholderType {
-  String = "String",
-  int = "int",
-  num = "num",
-  double = "double",
-  DateTime = "DateTime",
-  plural = "plural",
-}
-
 export function getPlaceholderTypes() {
   return Object.keys(PlaceholderType).filter((p) => isNaN(Number(p)));
 }
@@ -355,10 +355,6 @@ export function getPlaceholderType(placeholderTypeValue: string) {
   )[0] as PlaceholderType;
 }
 
-export class PlaceholderTypeItem implements vscode.QuickPickItem {
-  constructor(readonly label: string) {}
-}
-
 export async function showPlaceholderQuickPick(
   variable: string
 ): Promise<PlaceholderType> {
@@ -367,11 +363,6 @@ export async function showPlaceholderQuickPick(
     getPlaceholderTypes().map((p) => new PlaceholderTypeItem(p))
   );
   return getPlaceholderType(placeholderTypeValue);
-}
-
-export interface PackageInfo {
-  projectRoot: string;
-  projectName: string;
 }
 
 export const findPubspec = async (activeFileUri: vscode.Uri) => {
@@ -418,20 +409,6 @@ export const fetchPackageInfoFor = async (
   };
 };
 
-class StringEscapeSequence {
-  private readonly unescapedStringRegex: RegExp;
-
-  constructor(readonly start: string) {
-    this.unescapedStringRegex = new RegExp(
-      `^${start}([\\s\\S]*?)${start.replace("r", "")}$`,
-      "iu"
-    );
-  }
-
-  getUnescapedString = (input: string): string =>
-    (input.match(this.unescapedStringRegex) ?? [])[1].replace(/\\n/gu, "\n");
-}
-
 export const escapeSequences = [
   'r"""',
   "r'''",
@@ -460,42 +437,6 @@ export const resolvePath = (inputPath: string): string =>
       .split(path.sep)
       .filter((segment) => segment !== PARENT_DIRECTORY)
   );
-
-export class Placeholder {
-  public format?: string;
-
-  public symbol?: string;
-
-  public decimalDigits?: number;
-
-  public customPattern?: string;
-
-  constructor(
-    readonly name: string,
-    readonly value: string,
-    readonly type: PlaceholderType
-  ) {}
-
-  addFormat(value: string): this {
-    this.format = value;
-    return this;
-  }
-
-  addSymbol(value: string): this {
-    this.symbol = value;
-    return this;
-  }
-
-  addDecimalDigits(value: number): this {
-    this.decimalDigits = value;
-    return this;
-  }
-
-  addCustomPattern(format: string): this {
-    this.customPattern = format;
-    return this;
-  }
-}
 
 export function convertNullableTypeToNonNullableType(t: string): string {
   if (t.endsWith("?")) {
@@ -673,3 +614,382 @@ export function replaceLine(
 ) {
   edit.replace(document.uri, range, newLineText);
 }
+
+async function findYamlFiles(
+  projectName: string,
+  yamlFileName: string
+): Promise<vscode.Uri[]> {
+  const yamlFiles = await vscode.workspace.findFiles(
+    `**/${projectName}/${yamlFileName}`
+  );
+  if (yamlFiles.length !== 0) {
+    return yamlFiles;
+  }
+  return await vscode.workspace.findFiles(`**/${yamlFileName}`);
+}
+
+async function findFiles(include: string): Promise<vscode.Uri[]> {
+  return await vscode.workspace.findFiles(resolvePath(include));
+}
+
+async function findArbFiles(
+  projectName: string,
+  arbDir: string
+): Promise<vscode.Uri[]> {
+  const arbFiles = await findFiles(`**/${projectName}/${arbDir}/*.arb`);
+  if (arbFiles.length !== 0) {
+    return arbFiles;
+  }
+  return await findFiles(`**/${arbDir}/*.arb`);
+}
+
+export async function getArbFiles(
+  projectName: string
+): Promise<[vscode.Uri[], vscode.Uri | undefined]> {
+  const yamlFileName = "l10n.yaml";
+  const yamlFiles = (await findYamlFiles(projectName, yamlFileName)).filter(
+    (yamlFile) => yamlFile.path.includes(".fvm") === false
+  );
+
+  if (yamlFiles.length === 0) {
+    const errorMessage = `The ${yamlFileName} file was not found.`;
+    vscode.window.showErrorMessage(errorMessage);
+    throw new Error(errorMessage);
+  }
+  const yamlFile = yamlFiles[0];
+  const textDocument = await vscode.workspace.openTextDocument(yamlFile);
+  const parsedConfiguration = yaml.parseDocument(textDocument.getText());
+
+  const arbDir = parsedConfiguration.get("arb-dir") as string;
+  const arbFiles = await findArbFiles(projectName, arbDir);
+
+  const templateArbFileName =
+    (parsedConfiguration.get("template-arb-file") as string | undefined) ??
+    "app_en.arb";
+  const templateArbFile = arbFiles.find((arbFile) =>
+    arbFile.path.endsWith(templateArbFileName)
+  );
+  return [arbFiles, templateArbFile];
+}
+
+export async function getChangesForArbFiles(
+  parameters: EditFilesParameters
+): Promise<vscode.WorkspaceEdit> {
+  const projectName = getProjectName(parameters.uri);
+  const [files, templateFile] = await getArbFiles(projectName);
+  if (files.length === 0) {
+    vscode.window.showErrorMessage(`No arb files found.`);
+    throw new Error(`No arb files found.`);
+  }
+  if (!templateFile) {
+    vscode.window.showErrorMessage(`No template arb file found.`);
+    throw new Error(`No template arb file found.`);
+  }
+  const openTextDocuments: Thenable<vscode.TextDocument>[] = [];
+  files.forEach((file) => {
+    openTextDocuments.push(vscode.workspace.openTextDocument(file));
+  });
+  const workspaceEdit = new vscode.WorkspaceEdit();
+  const { key, value } = parameters.keyValue;
+  const { description, placeholders } = parameters;
+  const sortArbEnabled = true;
+  (await Promise.all(openTextDocuments)).forEach((content, index) => {
+    const file = files[index];
+    const isMetadataEnabled = true;
+    workspaceEdit.replace(
+      file,
+      new vscode.Range(
+        new vscode.Position(0, 0),
+        new vscode.Position(Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER)
+      ),
+      toJson(
+        content.getText(),
+        new L10nObject(
+          isMetadataEnabled || file === templateFile,
+          key,
+          description,
+          value,
+          placeholders
+        ),
+        sortArbEnabled
+      )
+    );
+  });
+
+  const appLocalizationsVariable = "l10n";
+  workspaceEdit.replace(
+    parameters.uri,
+    parameters.range,
+    getFunctionCall(
+      appLocalizationsVariable,
+      key,
+      placeholders.map((p) => p.value)
+    )
+  );
+  return workspaceEdit;
+}
+
+export function getFunctionCall(
+  appLocalizationsVariable: string,
+  key: string,
+  variables: string[]
+): string {
+  const functionCall = `${appLocalizationsVariable}.${key}`;
+  if (variables.length === 0) {
+    return functionCall;
+  }
+  const variablesString = variables
+    .map((v, i) => (i === variables.length - 1 ? `${v}` : `${v}, `))
+    .reduce((a, p) => a + p);
+  return `${functionCall}(${variablesString})`;
+}
+
+export function getProjectName(documentUri: vscode.Uri): string {
+  return documentUri.path.split("/lib/")[0].split("/").pop() ?? "";
+}
+
+export async function runGeneration(): Promise<void> {
+  await runIfExist("flutter.task.genl10n");
+}
+
+export async function runIfExist(
+  flutterPackagesGetCommand: string
+): Promise<void> {
+  const commands = await vscode.commands.getCommands();
+  if (!commands.includes(flutterPackagesGetCommand)) {
+    return;
+  }
+  await vscode.commands.executeCommand(flutterPackagesGetCommand);
+}
+
+export async function getPlaceholder(variable: string) {
+  const name = await showInputBox(
+    `Enter the name of the variable ${variable}`,
+    camelize(variable)
+  );
+  const placeholderType = await showPlaceholderQuickPick(name);
+
+  let placeholder = new Placeholder(name, variable, placeholderType);
+
+  switch (placeholderType) {
+    case PlaceholderType.DateTime: {
+      const format = await showDateFormatQuickPick(name);
+      placeholder = placeholder.addFormat(format);
+      break;
+    }
+    case PlaceholderType.int:
+    case PlaceholderType.num:
+    case PlaceholderType.double: {
+      const numberFormats: string[] = [];
+      if (placeholderType === PlaceholderType.int) {
+        numberFormats.push("none");
+      }
+      numberFormats.push(...validNumberFormats);
+      const format = await showQuickPick(
+        `Choose the number format for the variable ${variable}`,
+        numberFormats.map((p) => new LionizationPickItem(p))
+      );
+      if (format !== "none") {
+        placeholder = placeholder.addFormat(format);
+        if (includeInSymbol(format)) {
+          const symbol = await showInputBox(
+            `Choose the symbol for the variable ${name}`,
+            ""
+          );
+          placeholder = placeholder.addSymbol(symbol);
+        }
+        if (includeInDecimalDigits(format)) {
+          const decimalDigits = await showInputBox(
+            `Choose the decimal digits for the variable ${name}`,
+            ""
+          );
+          placeholder = placeholder.addDecimalDigits(Number(decimalDigits));
+        }
+        if (includeInCustomPattern(format)) {
+          const customPattern = await showInputBox(
+            `Choose the custom pattern for the variable ${name}`,
+            ""
+          );
+          placeholder = placeholder.addCustomPattern(customPattern);
+        }
+      }
+      break;
+    }
+    default:
+      break;
+  }
+
+  return placeholder;
+}
+
+export async function setEditFilesParameters(
+  commandParameters: CommandParameters
+): Promise<EditFilesParameters> {
+  const key = await showInputBox(
+    "Enter the message name",
+    camelize(commandParameters.key)
+  );
+
+  let description: string | null = null;
+  // if (Configuration.getInstance().getHaveDescription()) {
+  //   description = await showInputBox("Enter the description", "");
+  // }
+
+  const variables = extractInterpolatedVariables(commandParameters.value);
+  const placeholders: Placeholder[] = [];
+  if (Array.isArray(variables)) {
+    for (const variable of variables) {
+      placeholders.push(await getPlaceholder(variable));
+    }
+  }
+
+  return new EditFilesParameters(
+    commandParameters.uri,
+    commandParameters.range,
+    new KeyValuePair(key, commandParameters.value),
+    description,
+    placeholders
+  );
+}
+
+export function getOptionalParametersMap(
+  placeholder: Placeholder
+): Map<string, unknown> {
+  const optionalParametersMap = new Map<string, unknown>();
+  if (typeof placeholder.symbol !== "undefined") {
+    optionalParametersMap.set("symbol", placeholder.symbol);
+  }
+  if (typeof placeholder.decimalDigits !== "undefined") {
+    optionalParametersMap.set("decimalDigits", placeholder.decimalDigits);
+  }
+  if (typeof placeholder.customPattern !== "undefined") {
+    optionalParametersMap.set("customPattern", placeholder.customPattern);
+  }
+  return optionalParametersMap;
+}
+
+export function getPlaceholderMap(placeholder: Placeholder) {
+  const placeholderMap = new Map<string, unknown>();
+
+  if (placeholder.type !== PlaceholderType.plural) {
+    placeholderMap.set("type", placeholder.type);
+  }
+
+  switch (placeholder.type) {
+    case PlaceholderType.DateTime:
+      if (typeof placeholder.format !== "undefined") {
+        placeholderMap.set("format", placeholder.format);
+        if (notInclude(placeholder.format)) {
+          placeholderMap.set("isCustomDateFormat", "true");
+        }
+      }
+      return placeholderMap;
+    case PlaceholderType.int:
+    case PlaceholderType.num:
+    case PlaceholderType.double:
+      if (typeof placeholder.format !== "undefined") {
+        placeholderMap.set("format", placeholder.format);
+        if (
+          typeof placeholder.symbol !== "undefined" ||
+          typeof placeholder.decimalDigits !== "undefined" ||
+          typeof placeholder.customPattern !== "undefined"
+        ) {
+          placeholderMap.set(
+            "optionalParameters",
+            Object.fromEntries(getOptionalParametersMap(placeholder))
+          );
+        }
+      }
+      return placeholderMap;
+    default:
+      return placeholderMap;
+  }
+}
+
+export function toJson(
+  text: string,
+  l10nKey: L10nObject | null,
+  sorted: boolean
+): string {
+  const map = new Map<string, unknown>(
+    Object.entries<string>(JSON.parse(text) as string)
+  );
+  if (l10nKey) {
+    const { isMetadataEnabled, key, description, value, placeholders } =
+      l10nKey;
+    map.set(
+      key,
+      placeholders.length > 0 ? replacePlaceholders(value, placeholders) : value
+    );
+
+    if (isMetadataEnabled && (description || placeholders.length > 0)) {
+      const entry = {
+        ...(description && { description }),
+        ...(placeholders.length > 0 && {
+          placeholders: Object.fromEntries(getPlaceholdersMap(placeholders)),
+        }),
+      };
+      map.set(`@${key}`, entry);
+    }
+  }
+  return JSON.stringify(
+    Object.fromEntries(sorted ? sortArb(map) : map),
+    (_key: string, _value: unknown): unknown => {
+      if (typeof _value === "string") {
+        return _value.replace(/\\'/gu, "'");
+      }
+      return _value;
+    },
+    2
+  );
+}
+
+export function sortArb(map: Map<string, unknown>): Map<string, unknown> {
+  return new Map(
+    [...map].sort((a, b) => {
+      if (a[0] === "@@locale") {
+        return -1;
+      }
+      if (b[0] === "@@locale") {
+        return 1;
+      }
+      const compared = String(a[0].replace("@", "")).localeCompare(
+        b[0].replace("@", "")
+      );
+      if (compared === 0) {
+        if (a[0].startsWith("@")) {
+          return 1;
+        }
+        if (b[0].startsWith("@")) {
+          return -1;
+        }
+      }
+
+      return compared;
+    })
+  );
+}
+
+export const getPlaceholdersMap = (
+  placeholders: Placeholder[]
+): Map<string, unknown> =>
+  placeholders.reduce(
+    (map, placeholder) =>
+      map.set(
+        placeholder.name,
+        Object.fromEntries(getPlaceholderMap(placeholder))
+      ),
+    new Map<string, unknown>()
+  );
+
+export const replacePlaceholders = (
+  value: string,
+  placeholders: Placeholder[]
+): string =>
+  placeholders.reduce((v, p) => {
+    const current = v.replace(/\$\{?([^\s{}]+)\}?/u, `{${p.name}}`);
+    return p.type === PlaceholderType.plural
+      ? `{${p.name}, plural, other{${current}}}`
+      : current;
+  }, value);
+

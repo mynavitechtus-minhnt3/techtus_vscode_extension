@@ -2,14 +2,14 @@ import * as changeCase from "change-case";
 import * as fs from "fs";
 import * as lo from "lodash";
 import * as vscode from "vscode";
-import { getRiverpodTemplates } from "../templates/riverpodTemplateManager";
-import { configResolver } from "../utils/configResolver";
+import { configResolver } from "../../utils/config_resolver";
 import {
   fetchPackageInfoFor,
   genFile,
   showPrompt
-} from "../utils/utils";
-import { autoExport } from "./auto_export.command";
+} from "../../utils/utils";
+import { autoExport } from "../auto_export.command";
+import { getRiverpodTemplates } from "./templates/riverpodTemplateManager";
 
 export const createNewPage = async () => {
   const rawEditor = vscode.window.activeTextEditor;

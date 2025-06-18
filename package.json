@@ -42,11 +42,6 @@
           "description": "Any code above the barrier will not be replaced. If it is empty, all codes will be replaced",
           "default": ""
         },
-        "mynavimobiletool.appName": {
-          "type": "string",
-          "description": "App name declared in pubspec.yaml",
-          "default": "nalsflutter"
-        },
         "mynavimobiletool.uiFolderPath": {
           "type": "string",
           "description": "The folder path to create page and viewmodel",
@@ -60,8 +55,8 @@
         "mynavimobiletool.riverpodPageTemplate": {
           "type": "string",
           "description": "Template set used when creating a new riverpod page",
-          "enum": ["template1", "template2"],
-          "default": "template1"
+          "enum": ["multiModule", "singleModule"],
+          "default": "singleModule"
         }
       }
     },

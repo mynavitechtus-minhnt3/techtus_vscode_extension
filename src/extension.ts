@@ -2,12 +2,12 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import { autoExport } from "./commands/auto_export.command";
-import { transformFromClipboardToDataModel } from "./commands/clipboard_to_data_model.command";
+import { transformFromClipboardToDataModel } from "./commands/clipboard_to_data_model/clipboard_to_data_model.command";
 import { createUTFile } from "./commands/create_unit_test_file.command";
 import { extractApiUrl } from "./commands/extract_api_url.command";
 import { jsonToDataModel } from "./commands/json_to_data_model.command";
 import { jsonToParams } from "./commands/json_to_params.command";
-import { createNewPage } from "./commands/new_riverpod_page.command";
+import { createNewPage } from "./commands/new_riverpod_page/new_riverpod_page.command";
 import {
   convertBasePageToBaseStatefulPage,
   convertBaseStatefulPageToBasePage,
@@ -27,7 +27,7 @@ import {
   wrapWithStack,
   wrapWithVerticalPadding,
 } from "./commands/wrap_with_widget.command";
-import { configChanges, documentSave } from "./utils/configResolver";
+import { configChanges, documentSave } from "./utils/config_resolver";
 
 const DART_MODE = { language: "dart", scheme: "file" };
 

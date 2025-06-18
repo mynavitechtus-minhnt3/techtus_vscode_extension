@@ -3,19 +3,19 @@ import * as _ from "lodash";
 import * as path from "path";
 import * as vscode from "vscode";
 import { window } from "vscode";
-import { configResolver } from "../utils/configResolver";
+import { configResolver } from "../../utils/config_resolver";
 import {
-    fetchPackageInfoFor,
-    getClipboardText,
-    handleError,
-    showPrompt,
-    validateJSON,
-    writeFile,
-} from "../utils/utils";
-import { autoExport } from "./auto_export.command";
-import { ModelGenerator } from "./clipboard_to_data_model/model-generator";
-import { ClassNameModel, Settings } from "./clipboard_to_data_model/settings";
-import { ClassDefinition } from "./clipboard_to_data_model/syntax";
+  fetchPackageInfoFor,
+  getClipboardText,
+  handleError,
+  showPrompt,
+  validateJSON,
+  writeFile,
+} from "../../utils/utils";
+import { autoExport } from "../auto_export.command";
+import { ModelGenerator } from "./model-generator";
+import { ClassNameModel, Settings } from "./settings";
+import { ClassDefinition } from "./syntax";
 
 export const transformFromClipboardToDataModel = async () => {
   // let input = new Input();
@@ -80,6 +80,8 @@ export const transformFromClipboardToDataModel = async () => {
   // Create new settings.
   const settings = new Settings(config);
   await createClass(settings).catch(handleError);
+  await autoExport();
+  vscode.window.showInformationMessage("Done!");
 };
 
 export async function createClass(settings: Settings) {
@@ -102,7 +104,5 @@ export async function createClass(settings: Settings) {
       const data = classDef.toCodeGenString();
       await writeFile(file, data);
     }
-
-    autoExport();
   }
 }

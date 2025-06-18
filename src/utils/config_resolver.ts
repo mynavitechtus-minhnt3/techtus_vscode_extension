@@ -8,7 +8,6 @@ export class ConfigResolver {
   public uiFolderPath: string;
   public dataModelPath: string;
   public riverpodPageTemplate: string;
-  public appName: string;
 
   constructor() {
     const config = vscode.workspace.getConfiguration(
@@ -21,9 +20,8 @@ export class ConfigResolver {
     this.autoExportBarrier = config.get("autoExportBarrier") || "";
     this.uiFolderPath = config.get("uiFolderPath") || "";
     this.dataModelPath = config.get("dataModelPath") || "";
-    this.appName = config.get("appName") || "";
     this.riverpodPageTemplate =
-      config.get("riverpodPageTemplate") || "template1";
+      config.get("riverpodPageTemplate") || "singleModule";
   }
 }
 

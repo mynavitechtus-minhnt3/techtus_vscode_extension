@@ -240,7 +240,7 @@ export class ClassDefinition {
       1
     );
     sb += printLine("@freezed");
-    sb += printLine(`class Api${this.name}Data with `, 1);
+    sb += printLine(`sealed class Api${this.name}Data with `, 1);
     sb += printLine(`_$Api${this.name}Data {`);
     sb += privatConstructor;
     sb += printLine(`const factory Api${this.name}Data({`, 1, 1);
@@ -287,7 +287,8 @@ export class ClassDefinition {
 
     for (const name of names) {
       if (name !== null) {
-        imports += `import 'api_${name}${this.nameEnhancement}_data.dart';\n`;
+        imports += `import '../../index.dart';\n`;
+        break; // only one import is needed
       }
     }
 

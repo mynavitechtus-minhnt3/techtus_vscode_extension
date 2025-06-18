@@ -1,11 +1,10 @@
-import * as _ from "lodash";
 import * as vscode from "vscode";
-import tr from "googletrans";
-import * as changeCase from "change-case";
-import { setEditFilesParameters } from "../../extension/setEditFilesParameters";
-import { CommandParameters } from "./commandParameters";
-import { applySaveAndRunGeneration } from "../../extension/applySaveAndRunFlutterPubGet";
-import { EditFilesParameters } from "./editFilesParameters";
+import { CommandParameters, EditFilesParameters } from "../../utils/classes";
+import {
+  getChangesForArbFiles,
+  runGeneration,
+  setEditFilesParameters,
+} from "../../utils/utils";
 
 export const translateAndExtractValueToArbFiles = async () => {
   const text = await vscode.env.clipboard.readText();
@@ -24,11 +23,22 @@ async function doTransform(text: string): Promise<void> {
         vscode.window.activeTextEditor!.document.uri,
         vscode.window.activeTextEditor!.selection,
         translated.text,
-        text,
+        text
       )
     );
     applySaveAndRunGeneration(editFilesParameters);
   } catch (error) {
     console.error("Translation error:", error);
   }
+}
+
+async function applySaveAndRunGeneration(
+  editFilesParameters: EditFilesParameters
+): Promise<void> {
+  const { workspace } = vscode;
+  await workspace.applyEdit(await getChangesForArbFiles(editFilesParameters), {
+    isRefactoring: true,
+  });
+  await workspace.saveAll();
+  await runGeneration();
 }
