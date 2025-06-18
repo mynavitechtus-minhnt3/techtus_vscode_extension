@@ -1,7 +1,7 @@
 import * as _ from "lodash";
 import * as changeCase from "change-case";
 import { ClassNameModel } from "./settings";
-import { TypeDefinition } from "./constructor";
+import { TypeDefinition, isPrimitiveType } from "./constructor";
 export const emptyListWarn = "list is empty";
 export const ambiguousListWarn = "list is ambiguous";
 export const ambiguousTypeWarn = "type is ambiguous";
@@ -205,13 +205,11 @@ export class ClassDefinition {
     }
 
     if (valueType.startsWith("List")) {
-      return (
-        "<Api" +
-        (
-          valueType.substring(5, valueType.length - 1)
-        ) +
-        "Data>[]"
-      );
+      const innerType = valueType.substring(5, valueType.length - 1).trim();
+      if (isPrimitiveType(innerType)) {
+        return `<${innerType}>[]`;
+      }
+      return `<Api${innerType}Data>[]`;
     }
 
     if (valueType.startsWith("Map")) {
