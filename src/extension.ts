@@ -51,7 +51,7 @@ export function activate(context: vscode.ExtensionContext) {
       "mynavimobiletool.jsonToParams",
       jsonToParams
     ),
-    vscode.commands.registerCommand("mynavimobiletool.autoExport", autoExport),
+    // vscode.commands.registerCommand("mynavimobiletool.autoExport", autoExport),
     vscode.commands.registerCommand(
       "mynavimobiletool.createUTFile",
       createUTFile

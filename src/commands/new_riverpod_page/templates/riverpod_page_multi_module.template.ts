@@ -26,9 +26,7 @@ class ${pascalCaseFeature}Page extends BasePage<${pascalCaseFeature}State,
   @override
   Widget buildPage(BuildContext context, WidgetRef ref) {
     return CommonScaffold(
-      body: Center(
-
-      ),
+      body: Container(),
     );
   }
 }  

@@ -3,7 +3,7 @@
   "displayName": "MynaviMobileTool",
   "description": "Super power tool for Mynavi Mobile Team",
   "icon": "images/mynavi.png",
-  "version": "2.2.2",
+  "version": "2.2.6",
   "engines": {
     "vscode": "^1.75.0"
   },
@@ -19,29 +19,6 @@
     "configuration": {
       "title": "MynaviMobileTool settings",
       "properties": {
-        "mynavimobiletool.excludeFilesWhenAutoExport": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "A list of generated file extensions to exclude",
-          "default": [
-            "g.dart",
-            "config.dart",
-            "freezed.dart",
-            "mapper.dart"
-          ]
-        },
-        "mynavimobiletool.autoExportOnSave": {
-          "type": "boolean",
-          "description": "Auto export on file save",
-          "default": false
-        },
-        "mynavimobiletool.autoExportBarrier": {
-          "type": "string",
-          "description": "Any code above the barrier will not be replaced. If it is empty, all codes will be replaced",
-          "default": ""
-        },
         "mynavimobiletool.uiFolderPath": {
           "type": "string",
           "description": "The folder path to create page and viewmodel",
@@ -57,6 +34,18 @@
           "description": "Template set used when creating a new riverpod page",
           "enum": ["multiModule", "singleModule"],
           "default": "singleModule"
+        },
+        "mynavimobiletool.widgetTestGlobPatterns": {
+          "type": "array",
+          "description": "Glob patterns that should create widget tests instead of unit tests.",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/ui/page/**",
+            "**/ui/popup/**",
+            "**/ui/component/**"
+          ]
         }
       }
     },
@@ -76,10 +65,6 @@
       {
         "command": "mynavimobiletool.jsonToParams",
         "title": "mynavi:[API] Json to Params"
-      },
-      {
-        "command": "mynavimobiletool.autoExport",
-        "title": "mynavi:Auto export"
       },
       {
         "command": "mynavimobiletool.createUTFile",

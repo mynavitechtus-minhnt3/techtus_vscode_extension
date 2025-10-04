@@ -8,6 +8,7 @@ export class ConfigResolver {
   public uiFolderPath: string;
   public dataModelPath: string;
   public riverpodPageTemplate: string;
+  public widgetTestGlobPatterns: Array<string>;
 
   constructor() {
     const config = vscode.workspace.getConfiguration(
@@ -22,6 +23,12 @@ export class ConfigResolver {
     this.dataModelPath = config.get("dataModelPath") || "";
     this.riverpodPageTemplate =
       config.get("riverpodPageTemplate") || "singleModule";
+    this.widgetTestGlobPatterns =
+      config.get<string[]>("widgetTestGlobPatterns") || [
+        "**/ui/page/**",
+        "**/ui/popup/**",
+        "**/ui/component/**",
+      ];
   }
 }
 

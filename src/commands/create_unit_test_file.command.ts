@@ -6,19 +6,19 @@ import { configResolver } from "../utils/config_resolver";
 
 export const createUTFile = async () => {
   const currentFile = vscode.window.activeTextEditor!.document.uri;
-  const currentPath = currentFile.path;
+  const currentPath = normalizePath(currentFile.fsPath);
   const currentFileName = currentPath.substring(
     currentPath.lastIndexOf("/") + 1,
     currentPath.lastIndexOf(".")
   );
 
-  if ((currentFileName.endsWith("_page") && currentPath.includes("ui/page")) || currentPath.includes("ui/component")) {
-    createPageWidgetTestFile(currentFile, currentPath, currentFileName);
+  if (currentFileName.endsWith("_view_model")) {
+    createVMUTFile(currentFile, currentPath, currentFileName);
     return;
   }
 
-  if (currentFileName.endsWith("_view_model")) {
-    createVMUTFile(currentFile, currentPath, currentFileName);
+  if (shouldCreateWidgetTestFile(currentFile)) {
+    createPageWidgetTestFile(currentFile, currentPath, currentFileName);
     return;
   }
 
@@ -79,6 +79,94 @@ void main() {
   await vscode.window.showTextDocument(doc, { preview: false });
   await vscode.commands.executeCommand("editor.action.formatDocument");
 };
+
+const normalizePath = (value: string): string => value.replace(/\\/g, "/");
+
+const shouldCreateWidgetTestFile = (file: vscode.Uri): boolean => {
+  const patterns = configResolver.widgetTestGlobPatterns || [];
+  if (!patterns.length) {
+    return false;
+  }
+
+  const absolutePath = normalizePath(file.fsPath);
+  const relativePath = normalizePath(
+    vscode.workspace.asRelativePath(file, false) || ""
+  );
+  const pathCandidates = new Set<string>([absolutePath]);
+  if (relativePath) {
+    pathCandidates.add(relativePath);
+  }
+
+  const lowerCaseCandidates = Array.from(pathCandidates).map((candidate) =>
+    candidate.toLowerCase()
+  );
+
+  if (lowerCaseCandidates.some((candidate) => candidate.includes("/view_model/"))) {
+    return false;
+  }
+
+  let isMatch = false;
+
+  for (const rawPattern of patterns) {
+    const trimmedPattern = rawPattern.trim();
+    if (!trimmedPattern) {
+      continue;
+    }
+
+    const isNegated = trimmedPattern.startsWith("!");
+    const effectivePattern = isNegated
+      ? trimmedPattern.substring(1).trim()
+      : trimmedPattern;
+
+    if (!effectivePattern) {
+      continue;
+    }
+
+    const matched = Array.from(pathCandidates).some((candidate) =>
+      matchesGlob(effectivePattern, candidate)
+    );
+
+    if (matched) {
+      isMatch = !isNegated;
+    }
+  }
+
+  return isMatch;
+};
+
+const globRegExpCache = new Map<string, RegExp>();
+
+const matchesGlob = (pattern: string, target: string): boolean => {
+  if (!globRegExpCache.has(pattern)) {
+    globRegExpCache.set(pattern, globToRegExp(pattern));
+  }
+  return globRegExpCache.get(pattern)!.test(target);
+};
+
+const globToRegExp = (pattern: string): RegExp => {
+  let regex = "^";
+  for (let i = 0; i < pattern.length; i++) {
+    const char = pattern[i];
+    if (char === "*") {
+      const isDoubleStar = pattern[i + 1] === "*";
+      if (isDoubleStar) {
+        regex += ".*";
+        i++;
+      } else {
+        regex += "[^/]*";
+      }
+    } else if (char === "?") {
+      regex += "[^/]";
+    } else {
+      regex += escapeRegExp(char);
+    }
+  }
+  regex += "$";
+  return new RegExp(regex, "i");
+};
+
+const escapeRegExp = (value: string): string =>
+  value.replace(/[|\\{}()[\]^$+?.]/g, "\\$&");
 
 
 const createPageWidgetTestFile = async (

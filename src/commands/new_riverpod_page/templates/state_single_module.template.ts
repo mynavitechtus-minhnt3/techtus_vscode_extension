@@ -10,12 +10,10 @@ import '../../../../index.dart';
 part '${snakeCaseFeature}_state.freezed.dart';
 
 @freezed
-class ${pascalCaseFeature}State extends BaseState with _$${pascalCaseFeature}State {
+sealed class ${pascalCaseFeature}State extends BaseState with _$${pascalCaseFeature}State {
   const ${pascalCaseFeature}State._();
 
-  const factory ${pascalCaseFeature}State({
-    @Default('') String id,
-  }) = _${pascalCaseFeature}State;
+  const factory ${pascalCaseFeature}State() = _${pascalCaseFeature}State;
 }  
 `;
 }
